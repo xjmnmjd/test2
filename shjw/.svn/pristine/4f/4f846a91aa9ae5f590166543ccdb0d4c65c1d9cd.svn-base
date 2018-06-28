@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sojson.common.dao.KdMapper">
+     <insert id="addKd" parameterType="com.sojson.common.model.Kd">
+		insert into jw_kd
+		(kd_no,kd_company,orderid,insert_time) values
+		(#{kd_no,jdbcType=VARCHAR},#{kd_company,jdbcType=VARCHAR},
+		#{orderid,jdbcType=INTEGER},#{insert_time,jdbcType=VARCHAR})
+	</insert>
+   <select id="find_kd" parameterType="int" resultType="com.sojson.common.model.Kd">
+      select *from jw_kd where orderid=#{0}
+  </select>
+  	<update id="update_kd" parameterType="com.sojson.common.model.Kd">
+		update jw_kd set
+		kd_no=#{kd_no,jdbcType=VARCHAR},
+		kd_company=#{kd_company,jdbcType=VARCHAR}
+		where 
+		kdid=#{kdid,jdbcType=INTEGER}
+	</update>
+</mapper>

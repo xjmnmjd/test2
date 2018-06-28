@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sojson.common.dao.AutoMapper">
+   <select id="findList" parameterType="int" resultType="com.sojson.common.model.Auto">
+	select *from jw_auto limit #{page},10
+   </select>
+   
+    <select id="autoCount" resultType="int">
+	select count(*) from jw_auto
+   </select>
+   
+    <select id="findOneAuto" parameterType="int" resultType="com.sojson.common.model.Auto">
+	select *from jw_auto where id=#{0}
+   </select>
+   
+   <update id="updateAuto" parameterType="com.sojson.common.model.Auto">
+		update jw_auto 
+		<set>
+		<if test="auto_code!='' and auto_code!=null">
+		   auto_code=#{auto_code},
+		</if>
+		<if test="auto_name!='' and auto_name!=null">
+		   auto_name=#{auto_name},
+		</if>
+		<if test="update_time!='' and update_time!=null">
+		    update_time=#{update_time},
+		</if>
+		<if test="operator!='' and operator!=null">
+		   operator=#{operator},
+		</if>
+		<if test="userid!='' and userid!=null">
+		   userid=#{userid}
+		</if>	
+	    </set>
+		where id=#{id}
+	</update>
+   
+       <!-- 添加渠道商--> 
+   <insert id="addAuto" parameterType="com.sojson.common.model.Auto" >
+		insert into jw_auto
+		(auto_code,auto_name,update_time,operator,userid)
+		values
+		(#{auto_code,jdbcType=VARCHAR},
+		#{auto_name,jdbcType=VARCHAR},
+		#{update_time,jdbcType=VARCHAR},
+		#{operator,jdbcType=VARCHAR},
+		#{userid,jdbcType=INTEGER})
+   </insert>
+      <delete id="deleteAuto" parameterType="int">
+	   delete from jw_auto where id=#{0}
+       </delete>
+</mapper>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sojson.common.dao.StationMapper">
+	<insert id="addStation" parameterType="com.sojson.common.model.Station">
+		insert into jw_station
+		(station_no,station_name,station_address,station_phone,station_area,insert_time,station_province)
+		values
+		(#{station_no,jdbcType=VARCHAR},#{station_name,jdbcType=VARCHAR},#{station_address,jdbcType=VARCHAR},#{station_phone,jdbcType=VARCHAR}
+		,#{station_area,jdbcType=VARCHAR},#{insert_time,jdbcType=VARCHAR},#{station_province,jdbcType=VARCHAR})
+	</insert>
+	
+     <select id="getCountStation" parameterType="com.sojson.common.model.Station"
+		resultType="int">
+	select count(1) from jw_station
+	</select>
+	
+     <select id="selectPageAll" parameterType="Map"
+		resultType="com.sojson.common.model.Station">
+	select stationid,station_no,station_name,station_address,station_phone,
+	station_area,insert_time,station_province from jw_station limit #{pageindex},10
+	</select>
+	
+	 <select id="listStation" parameterType="Map"
+		resultType="com.sojson.common.model.Station">
+	    select *from jw_station
+	</select>
+	 <select id="findCity" parameterType="String"
+		resultType="com.sojson.common.model.Station">
+	    select *from jw_station where station_province=#{0}
+	</select>
+	 <select id="find_Address" parameterType="String"
+		resultType="com.sojson.common.model.Station">
+	    select *from jw_station where station_area=#{0}
+	</select>
+	
+	 <select id="selectOnestation" parameterType="int"
+		resultType="com.sojson.common.model.Station">
+	select stationid,station_no,station_name,station_address,station_phone,
+	station_area,insert_time,station_province from jw_station where stationid=#{stationid,jdbcType=INTEGER}
+	</select>
+	
+	<update id="updateStation" parameterType="com.sojson.common.model.Station">
+		update jw_station set
+		station_no=#{station_no,jdbcType=VARCHAR},
+		station_name=#{station_name,jdbcType=VARCHAR},
+		station_address=#{station_address,jdbcType=VARCHAR},
+		station_phone=#{station_phone,jdbcType=VARCHAR},
+		station_area=#{station_area,jdbcType=VARCHAR},
+		insert_time=#{insert_time,jdbcType=VARCHAR},
+		station_province=#{station_province,jdbcType=VARCHAR}
+		where 
+		stationid=#{stationid,jdbcType=INTEGER}
+	</update>
+	
+		<delete id="deleteStation" parameterType="String">
+		delete from jw_station
+		where stationid=#{stationid,jdbcType=INTEGER}
+	</delete>
+	
+			<!-- xj 2017-8-22添加 -->
+	<select id="getAll" resultType="com.sojson.common.model.Station">
+		select
+		stationid,station_no,station_name,station_address,station_phone,
+		station_area,insert_time,station_province from jw_station
+	</select>
+	<select id="getStationWT" resultType="Map" parameterType="String">
+		SELECT
+		s.wtid,s.wt_mj_fee,s.wt_mj_zl,s.wt_fmj_fee,s.wt_fmj_zl,s.wt_remark
+		FROM jw_station_wt s WHERE
+		s.wt_car_number=#{wt_car_number,jdbcType=VARCHAR};
+	</select>
+</mapper>

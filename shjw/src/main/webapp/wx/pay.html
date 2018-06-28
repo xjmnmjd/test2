@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta name="format-detection" content="telephone=no" />
+<title>收费详情</title>
+<link rel="stylesheet" type="text/css" href="css/normalize.css?20171222-01" />
+<link rel="stylesheet" type="text/css" href="css/main.css?20171222-01" />
+<link rel="stylesheet" type="text/css" href="css/style.css?20171222-01" />
+<link rel="stylesheet" type="text/css" href="css/index.css?20171222-01" />
+<script type="text/javascript" src="js/jquery-1.8.3.min.js?20171222-01"></script>
+<script type="text/javascript" src="js/common.js?20171222-01"></script>
+<script type="text/javascript" src="js/fastclick.js?20171222-01"></script>
+<script type="text/javascript" src="js/pay.js?20171222-01"></script>
+<link href="css/flow.css" rel="stylesheet" type="text/css?20171222-01" />
+<script type="text/javascript"
+	src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js?20171222-01">
+	
+</script>
+
+
+<style>
+#alert {
+	z-index: 2;
+	border: 1px solid rgba(0, 0, 0, .2);
+	width: 100%;
+	height: auto;
+	border-radius: 6px;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
+	background: #fff;
+	z-index: 1000;
+	position: absolute;
+	left: 0rem;
+	top: 4.4rem;
+	display: none;
+}
+
+.model-head {
+	height: 3.2rem;
+	line-height: 3.2rem;
+	color: #73879C;
+	margin-left: 1rem;
+	border-bottom: 1px solid #e5e5e5;
+}
+
+.close {
+	padding: 0;
+	cursor: pointer;
+	background: 0 0;
+	border: 0;
+	float: right;
+	font-size: 14px !important;
+	font-weight: 700;
+	text-shadow: 0 1px 0 #fff;
+	opacity: 0.4;
+	margin-right: 1rem;
+	height: 4.4rem;
+}
+
+#close:hover {
+	cursor: pointer;
+	color: #000;
+}
+
+#mask {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	background: #000;
+	opacity: 0.3;
+	display: none;
+	z-index: 1;
+}
+
+.model-content {
+	position: relative;
+	padding: 15px;
+}
+
+.model-foot {
+	padding: 15px;
+	text-align: right;
+}
+</style>
+
+
+</head>
+
+<body>
+	<input id="openId" style="display: none;" />
+	<header class="header">
+		<a class="ico header-back" href="javascript:history.back(-1)"></a>
+		<h1>收费详情</h1>
+		<a class="ico" id="head_tel_ico"></a>
+	</header>
+	<div id="head_tel_div">
+		<div>
+			<a href="tel:02160501999">客服电话</a>
+		</div>
+		<div>
+			<a href="tel:15000150003">投诉电话</a>
+		</div>
+		<div>
+			<a onclick="zxly()">在线留言</a>
+		</div>
+	</div>
+	<div id="infor_div">
+		<h2>在线留言</h2>
+		<div style="line-height: 3.2rem;margin: .5rem;">
+			客户姓名：<input placeholder="请输入您的姓名" id="contact_name">
+		</div>
+		<div style="line-height: 3.2rem;margin: .5rem;">
+			联系电话：<input placeholder="请输入您的联系电话" type="number" id="contact_phone">
+		</div>
+		<div style="height: 10rem;margin: .5rem;">
+			留言内容：
+			<textarea placeholder="请输入您的留言内容" id="contact_infor"></textarea>
+		</div>
+		<div id="infor_confirm" style="padding-top:2rem;margin-bottom:5rem;">
+			<div style="width: 50%;float: right;" onclick="addInfor()">
+				<input
+					style="text-align: center;background-color:#00bc8d;border-radius: .3rem;width: 80%;"
+					value="确认" />
+			</div>
+			<div style="width: 50%;" id="infor_cancel">
+				<input
+					style="text-align: center;background-color:#ddd;border-radius: .3rem;width: 80%;"
+					value="取消" />
+			</div>
+		</div>
+	</div>
+	<div id="infor_mask"></div>
+	<div class="container" style="margin-bottom:5rem">
+		<section class="add-car">
+			<ul class="clearfix">
+				<li><img src="img/ico_car_j.png" />
+					<p class="text m-left">
+						<span style="color: #000;" id="jcz_no"></span><span
+							id="jcz_address"></span><span id="jcz_phone"></span>
+					</p></li>
+			</ul>
+			<ul class="clearfix m-top" onclick="car_manager()">
+				<li>
+					<p class="text">
+						<span id="car_no" style="display: inline;"></span><em
+							id="foreign_car"></em><span id="type_nature"></span>
+					</p> <i class="ico ico-more"></i>
+				</li>
+			</ul>
+			<div class="nj-time m-top bg-fff">
+				<h3>年检时间以通知为准</h3>
+				<p>
+					年检费<span id="pay_nj_fee"></span>
+				</p>
+				<p>
+					环保检测费<span id="pay_hb_fee"></span>
+				</p>
+				<p>
+					尾气费<span id="pay_wq_fee"></span>
+				</p>
+				<p>
+					委托服务费<span id="pay_wt_fee"></span>
+				</p>
+				<p id="jsc" style="display: none;">
+					上门接送车费<span id="pay_jsc_fee"></span>
+				</p>
+				<p class="total">
+					合计<span style="color:#ff1e3c" id="pay_sum"></span>
+				</p>
+			</div>
+			<div class="alert-tip">
+				<h3>注意事项</h3>
+				<ul class="clearfix bg-fff">
+					<li>
+						<h4>年检需携带材料</h4>
+						<p id="nj_zl">无</p>
+					</li>
+					<li>
+						<h4>备注</h4>
+						<p id="nj_bz">无</p>
+					</li>
+				</ul>
+			</div>
+		</section>
+
+	</div>
+	<div class="btn">
+		<a>合计：<span id="pay_sum_all"></span></a><a id="tjyy">提交预约</a>
+	</div>
+
+
+	<div id="alert" class="">
+		<div class="model-head">
+			<span class="close">&times;</span>
+			<h4 class="modal-title">证件资料说明</h4>
+		</div>
+		<div class="model-content">
+			<div class="main">
+				<div class="col-md-12" id="flowDiv"
+					style="overflow-x: hidden;
+    overflow-y: scroll;">
+					请按照图示提供对应证件类别资料
+					<div>
+						<a style="margin: 1rem;">1、身份证</a>
+						<div style="margin:1rem; ">
+							<img src="img/sfz_1.png" style="width: 45%"> <img
+								src="img/sfz_2.png" style="width: 45%;margin-left: 1rem;">
+						</div>
+					</div>
+					<div>
+						<a style="margin: 1rem;">2、行驶证</a>
+						<div style="margin:1rem; ">
+							<img src="img/xsz_1.png" style="width: 45%"> <img
+								src="img/xsz_2.png" style="width: 45%;margin-left: 1rem;">
+						</div>
+						<div style="margin:1rem; ">
+							<img src="img/xsz_3.png" style="width: 45%"> <img
+								src="img/xsz_4.png" style="width: 45%;margin-left: 1rem;">
+						</div>
+					</div>
+					<div style="border-bottom:1px solid #ddd;">
+						<a>3、机动车交通事故责任强制保险单</a>
+						<div style="margin:1rem; ">
+							<img src="img/baodan.png" style="width: 95%">
+						</div>
+					</div>
+					<div
+						style="margin: 1rem;text-align: center;color:#00bc8d;font-size: 1.2rem;"
+						onclick="order_pay()">
+						<input type="button" value="我已了解">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="mask"></div>
+
+	<script>
+		$(function() {
+			FastClick.attach(document.body);
+			pay_init();
+			var myAlert = document.getElementById("alert");
+			var myMask = document.getElementById("mask");
+			$("#tjyy").click(function() {
+				myMask.style.display = "block";
+				myAlert.style.display = "block";
+				document.body.style.overflow = "hidden";
+			});
+			$(".close").click(function() {
+				myAlert.style.display = "none";
+				myMask.style.display = "none";
+			});
+			$("#flowDiv").css(
+					"height",
+					document.body.clientHeight - $(".header").height() * 2
+							- $(".model-head").height());
+			$("#head_tel_ico").click(function() {
+				var display = $("#head_tel_div").css("display");
+				if (display == "none") {
+					$("#head_tel_div").css("display", "block");
+				} else {
+					$("#head_tel_div").css("display", "none");
+				}
+			});
+			$(".container").click(function() {
+				$("#head_tel_div").css("display", "none");
+			});
+			$("#infor_cancel").click(function() {
+				$("#infor_div").css("display", "none");
+				$("#infor_mask").css("display", "none");
+				document.body.style.overflow = "visible";
+			});
+		});
+	</script>
+</body>
+</html>

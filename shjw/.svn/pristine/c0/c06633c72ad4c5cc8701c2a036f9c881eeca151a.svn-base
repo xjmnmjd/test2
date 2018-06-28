@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sojson.common.dao.Up_dateMapper">
+
+   <select id="findUp_date" parameterType="String" resultType="com.sojson.common.model.Up_date">
+	select *from jw_up_date where orderno=#{0}
+	</select>
+	
+	<insert id="addUp_date" parameterType="com.sojson.common.model.Up_date">
+		insert into jw_up_date
+		(update_time,orderno) values
+		(#{update_time,jdbcType=VARCHAR},#{orderno,jdbcType=VARCHAR})
+  </insert>
+  
+  	
+	<update id="update_up_date" parameterType="com.sojson.common.model.Up_date">
+		update jw_up_date set
+		update_time=#{update_time,jdbcType=VARCHAR}
+		where 
+		orderno=#{orderno,jdbcType=VARCHAR}
+	</update>
+</mapper>

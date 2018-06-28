@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sojson.common.dao.HfMapper">
+    <insert id="add_hf" parameterType="com.sojson.common.model.Hf">
+		insert into jw_hf
+		(hf_time,hf_content,orderid) values
+		(#{hf_time,jdbcType=VARCHAR},#{hf_content,jdbcType=VARCHAR},#{orderid,jdbcType=INTEGER})
+	</insert>
+	  
+	  
+	<select id="find_hf" parameterType="Map"
+		resultType="com.sojson.common.model.Hf">
+	select *from jw_hf where orderid=#{orderid,jdbcType=INTEGER}	
+	</select>
+</mapper>

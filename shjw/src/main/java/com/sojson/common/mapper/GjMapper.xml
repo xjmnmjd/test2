@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sojson.common.dao.GjMapper">
+	<insert id="add_GJ" parameterType="com.sojson.common.model.Gj">
+		insert into jw_gj
+		(orderno,update_time,status_1,status_2,operator) values
+		(#{orderno,jdbcType=VARCHAR},#{update_time,jdbcType=VARCHAR},
+		#{status_1,jdbcType=INTEGER},#{status_2,jdbcType=INTEGER},
+		#{operator,jdbcType=VARCHAR})
+	</insert>
+	<select id="findByOrderNo" resultType="com.sojson.common.model.Gj">
+		select * from jw_gj where
+		orderno=#{orderno,jdbcType=VARCHAR} order by update_time
+	</select>
+	
+    <select id="selectGjList" parameterType="Map" 
+    resultType="com.sojson.common.model.Gj">
+		select * from jw_gj where 1=1
+	    <if test="orderno!='' and orderno!=null">
+			AND orderno=#{orderno}
+		</if>
+	    <if test="licenseplate!='' and licenseplate!=null">
+			AND licenseplate=#{licenseplate}
+		</if>
+	    <if test="operator!='' and operator!=null">
+			AND operator=#{operator}
+		</if>
+		<if test="start_time!= null and start_time!=''">
+			AND update_time&gt;=#{start_time}
+		</if>
+		<if test="end_time!=null and end_time!=''">
+			AND update_time&lt;=#{end_time}
+		</if>			
+		order by update_time desc 
+		<if test="page!=-1">
+		limit #{page},10
+		</if>
+	</select>
+	
+    <select id="countGj" resultType="int">
+		select count(1) from jw_gj
+	</select>
+</mapper>

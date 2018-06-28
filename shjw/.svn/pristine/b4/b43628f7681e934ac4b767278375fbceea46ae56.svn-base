@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sojson.common.dao.NjStationMapper">
+  <select id="findnjlist" parameterType="Map"
+		resultType="com.sojson.common.model.Station_nj">
+	select njid,nj_name,nj_fee_a,nj_fee_b,nj_fee_c,nj_insert_time,station_id from jw_station_nj where station_id=#{station_id,jdbcType=INTEGER}	
+</select>
+   
+	<insert id="addNj" parameterType="com.sojson.common.model.Station_nj">
+		insert into jw_station_nj
+		(nj_name,nj_fee_a,nj_fee_b,nj_fee_c,nj_insert_time,station_id)
+		values
+		(#{nj_name,jdbcType=VARCHAR},#{nj_fee_a,jdbcType=VARCHAR},
+		#{nj_fee_b,jdbcType=VARCHAR},#{nj_fee_c,jdbcType=VARCHAR},
+		#{nj_insert_time,jdbcType=VARCHAR},#{station_id,jdbcType=INTEGER})
+	</insert>
+
+    <select id="selectOneNj" parameterType="String"
+		resultType="com.sojson.common.model.Station_nj">
+	select njid,nj_name,nj_fee_a,nj_fee_b,nj_fee_c,nj_insert_time,station_id from jw_station_nj where njid=#{njid,jdbcType=INTEGER}	
+</select>
+
+    <update id="updateNj" parameterType="com.sojson.common.model.Station_nj">
+		update jw_station_nj set
+		nj_name=#{nj_name,jdbcType=VARCHAR},
+		nj_fee_a=#{nj_fee_a,jdbcType=VARCHAR},
+		nj_fee_b=#{nj_fee_b,jdbcType=VARCHAR},
+		nj_fee_c=#{nj_fee_c,jdbcType=VARCHAR},
+		nj_insert_time=#{nj_insert_time,jdbcType=VARCHAR} where 
+		njid=#{njid,jdbcType=INTEGER}
+	</update>
+	
+	<delete id="deleteNj" parameterType="String">
+		delete from jw_station_nj
+		where njid=#{njid,jdbcType=INTEGER}
+	</delete>
+	<delete id="deleteNj_station" parameterType="String">
+		delete from jw_station_nj
+		where station_id=#{station_id,jdbcType=INTEGER}
+	</delete>
+</mapper>

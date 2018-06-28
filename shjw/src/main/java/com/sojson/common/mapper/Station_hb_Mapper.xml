@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sojson.common.dao.HbStationMapper">
+
+	<insert id="addHb" parameterType="com.sojson.common.model.Station_hb">
+		insert into jw_station_hb
+		(hb_name,hb_time_a,hb_time_b,hb_time_c,hb_time_d,stationid)
+		values
+		(#{hb_name,jdbcType=VARCHAR},#{hb_time_a,jdbcType=VARCHAR},
+		#{hb_time_b,jdbcType=VARCHAR},#{hb_time_c,jdbcType=VARCHAR},
+		#{hb_time_d,jdbcType=VARCHAR},#{stationid,jdbcType=INTEGER})
+	</insert>
+
+	<select id="hbList" parameterType="Map"
+		resultType="com.sojson.common.model.Station_hb">
+		select
+		hbid,hb_name,hb_time_a,hb_time_b,hb_time_c,hb_time_d,stationid from
+		jw_station_hb where stationid=#{stationid,jdbcType=INTEGER}
+	</select>
+	<select id="selectOneHb" parameterType="String"
+		resultType="com.sojson.common.model.Station_hb">
+		select
+		hbid,hb_name,hb_time_a,hb_time_b,hb_time_c,hb_time_d,stationid from
+		jw_station_hb where hbid=#{hbid,jdbcType=INTEGER}
+	</select>
+
+	<update id="updateHb" parameterType="com.sojson.common.model.Station_hb">
+		update jw_station_hb set
+		hb_name=#{hb_name,jdbcType=VARCHAR},
+		hb_time_a=#{hb_time_a,jdbcType=VARCHAR},
+		hb_time_b=#{hb_time_b,jdbcType=VARCHAR},
+		hb_time_c=#{hb_time_c,jdbcType=VARCHAR},
+		hb_time_d=#{hb_time_d,jdbcType=VARCHAR} where
+		hbid=#{hbid,jdbcType=INTEGER}
+	</update>
+
+	<delete id="deleteHb" parameterType="String">
+		delete from jw_station_hb
+		where hbid=#{hbid,jdbcType=INTEGER}
+	</delete>
+
+	<delete id="deleteHb_station" parameterType="String">
+		delete from
+		jw_station_hb
+		where stationid=#{stationid,jdbcType=INTEGER}
+	</delete>
+</mapper>

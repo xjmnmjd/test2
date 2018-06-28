@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sojson.common.dao.ChargebackMapper">
+   <!-- 退单申请 -->
+   <insert id="add_chargeback" parameterType="com.sojson.common.model.Chargeback">
+		insert into jw_chargeback
+		(td_reason,operator,update_time,userid,orderid) values
+		(#{td_reason,jdbcType=VARCHAR},
+		#{operator,jdbcType=VARCHAR},
+		#{update_time,jdbcType=VARCHAR},
+		#{userid,jdbcType=INTEGER},
+		#{orderid,jdbcType=INTEGER})
+   </insert>	
+</mapper>

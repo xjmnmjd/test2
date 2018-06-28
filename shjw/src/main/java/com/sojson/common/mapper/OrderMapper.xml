@@ -1,0 +1,1147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sojson.common.dao.OrderMapper">
+	<!-- 以下为徐君添加 -->
+	<insert id="insertOrder" parameterType="com.sojson.common.model.Order">
+		insert into jw_order
+		(submittime,owner,licenseplate,cartype,phonenumber,vehicle,rigisterdate,identificationno,insurancedate,identificationpath,carpath,uuid,openid,orderstatus,ordersource)
+		values
+		(#{submittime,jdbcType=VARCHAR},#{owner,jdbcType=VARCHAR},#{licenseplate,jdbcType=VARCHAR},#{cartype,jdbcType=VARCHAR}
+		,#{phonenumber,jdbcType=VARCHAR},#{vehicle,jdbcType=VARCHAR},#{rigisterdate,jdbcType=VARCHAR},#{identificationno,jdbcType=VARCHAR}
+		,#{insurancedate,jdbcType=VARCHAR},#{identificationpath,jdbcType=VARCHAR},#{carpath,jdbcType=VARCHAR},#{uuid,jdbcType=VARCHAR},#{openid,jdbcType=VARCHAR},0,#{ordersource,jdbcType=VARCHAR})
+	</insert>
+	<select id="findByUUID" parameterType="String"
+		resultType="com.sojson.common.model.Order">
+		select * from jw_order
+		where uuid=#{uuid,jdbcType=VARCHAR}
+		and openid=#{openid,jdbcType=VARCHAR}
+	</select>
+	<select id="findByOrderNo" parameterType="String"
+		resultType="com.sojson.common.model.Order">
+		select * from jw_order
+		where
+		orderno=#{orderno,jdbcType=VARCHAR} and
+		openid=#{openid,jdbcType=VARCHAR} and (is_del is null or is_del=0)
+	</select>
+	<select id="findPayOkByOrderNo" parameterType="String"
+		resultType="com.sojson.common.model.Order">
+		select * from jw_order
+		where
+		orderno=#{orderno,jdbcType=VARCHAR} and orderstatus=2 and
+		openid=#{openid,jdbcType=VARCHAR} and (is_del is null or is_del=0)
+	</select>
+	<select id="findPhoneByOrderNo" parameterType="String"
+		resultType="com.sojson.common.model.Order">
+		select * from jw_order
+		where
+		orderno=#{orderno,jdbcType=VARCHAR}
+	</select>
+	<select id="findByOpenId" resultType="com.sojson.common.model.Order">
+		select * from jw_order
+		where openid=#{openid,jdbcType=VARCHAR}
+		<if test="orderstatus==0">
+			and orderstatus=0
+		</if>
+		<if test="orderstatus==2">
+			and (orderstatus=1 or orderstatus=2)
+		</if>
+	</select>
+	<delete id="delOrderByUUID" parameterType="String">
+		delete from jw_order
+		where uuid=#{uuid,jdbcType=VARCHAR}
+	</delete>
+	<delete id="delOrderByOrderNo" parameterType="String">
+		delete from
+		jw_order
+		where orderno=#{orderno,jdbcType=VARCHAR}
+	</delete>
+	<update id="updateOrder" parameterType="com.sojson.common.model.Order">
+		update jw_order set
+		owner=#{owner,jdbcType=VARCHAR},licenseplate=#{licenseplate,jdbcType=VARCHAR},cartype=#{cartype,jdbcType=VARCHAR},
+		vehicle=#{vehicle,jdbcType=VARCHAR},rigisterdate=#{rigisterdate,jdbcType=VARCHAR},identificationno=#{identificationno,jdbcType=VARCHAR},
+		insurancedate=#{insurancedate,jdbcType=VARCHAR},identificationpath=#{identificationpath,jdbcType=VARCHAR},carpath=#{carpath,jdbcType=VARCHAR},openid=#{openid,jdbcType=VARCHAR},
+		is_del=#{is_del,jdbcType=INTEGER},update_time=#{update_time,jdbcType=VARCHAR}
+		where
+		uuid=#{uuid,jdbcType=VARCHAR}
+	</update>
+	<update id="updateOrderSXJC" parameterType="com.sojson.common.model.Order">
+		update jw_order set
+		is_collect_materials=#{is_collect_materials,jdbcType=INTEGER},collect_materials_time=#{collect_materials_time,jdbcType=VARCHAR},
+		collect_materials_address=#{collect_materials_address,jdbcType=VARCHAR},is_collect_car=#{is_collect_car,jdbcType=INTEGER},
+		collect_car_time=#{collect_car_time,jdbcType=VARCHAR},collect_car_address=#{collect_car_address,jdbcType=VARCHAR},
+		injury_accident_last_year=#{injury_accident_last_year,jdbcType=INTEGER},update_time=#{update_time,jdbcType=VARCHAR},
+		njdq_date=#{njdq_date,jdbcType=VARCHAR},send_material_address=#{send_material_address,jdbcType=VARCHAR}
+		where
+		uuid=#{uuid,jdbcType=VARCHAR}
+	</update>
+	<update id="updateOrderPay" parameterType="com.sojson.common.model.Order">
+		update jw_order set
+		is_bill=#{is_bill,jdbcType=INTEGER},is_deposit_payment=#{is_deposit_payment,jdbcType=INTEGER},
+		update_time=#{update_time,jdbcType=VARCHAR}
+		where
+		uuid=#{uuid,jdbcType=VARCHAR}
+	</update>
+	<select id="getStationNJ" parameterType="String" resultType="Map">
+		SELECT t.nj_fee_a,nj_fee_b FROM jw_station_nj t where
+		t.nj_name=#{nj_name,jdbcType=VARCHAR} and
+		t.station_id=#{station_id,jdbcType=INTEGER}
+	</select>
+	<select id="getStationHB" parameterType="String" resultType="Map">
+		SELECT t.hb_time_a,t.hb_time_b,t.hb_time_c,t.hb_time_d FROM
+		jw_station_hb t where t.hb_name=#{hb_name,jdbcType=VARCHAR} and
+		t.stationid=#{station_id,jdbcType=INTEGER}
+	</select>
+	<update id="updatePay" parameterType="com.sojson.common.model.Order">
+		update jw_order set
+		nj_fee=#{nj_fee,jdbcType=DOUBLE},hb_nj_fee=#{hb_nj_fee,jdbcType=DOUBLE},wq_fee=#{wq_fee,jdbcType=DOUBLE},
+		wt_fee=#{wt_fee,jdbcType=DOUBLE},totalorder=#{totalorder,jdbcType=DOUBLE},orderstatus=#{orderstatus,jdbcType=INTEGER},
+		station_id=#{station_id,jdbcType=INTEGER},station=#{station,jdbcType=VARCHAR},copetotal=#{totalorder,jdbcType=VARCHAR},
+		orderno=#{orderno,jdbcType=VARCHAR},update_time=#{update_time,jdbcType=VARCHAR}
+		where uuid=#{uuid,jdbcType=VARCHAR}
+	</update>
+	<update id="updateOrderState" parameterType="Map">
+		update jw_order set
+		orderstatus=#{orderstatus,jdbcType=INTEGER}
+		,time_end=#{time_end,jdbcType=VARCHAR},cash_fee=#{cash_fee,jdbcType=VARCHAR}
+		,result_code=#{result_code,jdbcType=VARCHAR},transaction_id=#{transaction_id,jdbcType=VARCHAR}
+		,err_code_des=#{err_code_des,jdbcType=VARCHAR},payment_amount=#{payment_amount,jdbcType=DOUBLE}
+		where
+		orderno=#{orderno,jdbcType=VARCHAR}
+	</update>
+	<!-- 以上为徐君添加 -->
+	<!-- 以下为朱结方添加 -->
+	<insert id="addOrder" parameterType="com.sojson.common.model.Order">
+		insert into jw_order
+		(submittime,owner,licenseplate,cartype,phonenumber,vehicle
+		,orderstatus,suditstatus
+		,rigisterdate,identificationno,insurancedate
+		,station_id,collect_materials_time,collect_materials_address
+		,collect_car_time,collect_car_address
+		,is_collect_materials,is_collect_car,injury_accident_last_year
+		,totalorder,orderno,copetotal,offlinepayment,payment_amount,models,vin_no,engine_number,njdq_date,send_material_address,station,orderRemark)
+		values
+		(#{submittime,jdbcType=VARCHAR},#{owner,jdbcType=VARCHAR},#{licenseplate,jdbcType=VARCHAR}
+		,#{cartype,jdbcType=VARCHAR},#{phonenumber,jdbcType=VARCHAR}
+		,#{vehicle,jdbcType=VARCHAR},#{orderstatus,jdbcType=INTEGER}
+		,#{suditstatus,jdbcType=INTEGER},#{rigisterdate,jdbcType=VARCHAR}
+		,#{identificationno,jdbcType=VARCHAR},#{insurancedate,jdbcType=VARCHAR}
+		,#{station_id,jdbcType=INTEGER},#{collect_materials_time,jdbcType=VARCHAR}
+		,#{collect_materials_address,jdbcType=VARCHAR},#{collect_car_time,jdbcType=VARCHAR}
+		,#{collect_car_address,jdbcType=VARCHAR},#{is_collect_materials,jdbcType=VARCHAR}
+		,#{is_collect_car,jdbcType=VARCHAR},#{injury_accident_last_year,jdbcType=VARCHAR}
+		,#{totalorder,jdbcType=VARCHAR},#{orderno,jdbcType=VARCHAR},#{copetotal,jdbcType=VARCHAR}
+		,#{offlinepayment,jdbcType=VARCHAR},#{payment_amount,jdbcType=VARCHAR}
+		,#{models,jdbcType=VARCHAR},#{vin_no,jdbcType=VARCHAR}
+		,#{engine_number,jdbcType=VARCHAR},#{njdq_date,jdbcType=VARCHAR}
+		,#{send_material_address,jdbcType=VARCHAR},#{station,jdbcType=VARCHAR}
+		,#{orderRemark,jdbcType=VARCHAR})
+	</insert>
+   <!--删除订单 -->
+	<delete id="deleteOrder" parameterType="int">
+		delete from jw_order where orderid=#{0}
+	</delete>
+	<!--客服员订单数量查询 -->
+	<select id="getCount_kfOrder" parameterType="java.lang.Long"
+		resultType="int">
+		select count(1) from jw_order where userid=#{0} and
+		orderstatus=2
+	</select>
+	<!--当月新订单数量查询 -->
+	<select id="count_month_list" resultType="int">
+		select count(1) from
+		jw_order where
+		date_format(submittime,'%Y-%m')=date_format(now(),'%Y-%m')
+	</select>
+
+	<!--已结算订单 -->
+	<select id="count_a_list" resultType="int">
+		select count(1) from
+		jw_order where
+		orderstatus=2 and (suditstatus=10 or suditstatus=11)
+	</select>
+	<!--未付款客服员订单数量查询 -->
+	<select id="getCount_nopaykfOrder" parameterType="java.lang.Long"
+		resultType="int">
+		select count(1) from jw_order where userid=#{0} and
+		orderstatus=1
+	</select>
+	<!--订单详情查询 -->
+	<select id="order_detail" parameterType="Map"
+		resultType="com.sojson.common.model.Order">
+		select *from jw_order where 1=1
+		<if test="orderid!=0 and orderid!=null">
+			AND orderid=#{orderid}
+		</if>
+		<if test="orderno!='' and orderno!=null">
+			AND orderno=#{orderno}
+		</if>
+	</select>
+
+	<select id="getCountOrder" parameterType="Map" resultType="int">
+		select count(1) from
+		jw_order where orderstatus=2
+		<if test="userid!=0">
+			AND userid=#{userid}
+		</if>
+	</select>
+
+	<select id="nfpCount" parameterType="Map" resultType="int">
+		select
+		count(1) from jw_order where
+		suditstatus=0 and orderstatus=2
+	</select>
+
+	<select id="njscountOrder" parameterType="Map" resultType="int">
+		select count(1) from jw_order where
+		1=1
+		<if test="userid!=0">
+			AND userid=#{userid}
+		</if>
+		AND suditstatus=1 and orderstatus=2
+	</select>
+	<!-- 违章查询 2 违章处理3 -->
+	<select id="wzcountOrder" parameterType="Map" resultType="int">
+		select count(1) from jw_order where 1=1
+		<if test="userid!=0">
+			AND userid=#{userid}
+		</if>
+		AND orderstatus=2 and (suditstatus=2 or suditstatus=3)
+	</select>
+
+	<select id="zlsj_Count" parameterType="Map" resultType="int">
+		select count(1) from jw_order where 1=1
+		<if test="userid!=0">
+			AND userid=#{userid}
+		</if>
+		AND orderstatus=2 and suditstatus=4
+	</select>
+	<!-- 委托办理中 5 资料已寄等待中 6 -->
+	<select id="wtCountOrder" parameterType="Map" resultType="int">
+		select count(1) from jw_order where 1=1
+		<if test="userid!=0">
+			AND userid=#{userid}
+		</if>
+		AND orderstatus=2 and (suditstatus=5 or suditstatus=6)
+	</select>
+
+	<!--缴费 7 -->
+	<select id="jfCountOrder" parameterType="Map" resultType="int">
+		select count(1) from jw_order where 1=1
+		<if test="userid!=0">
+			AND userid=#{userid}
+		</if>
+		AND orderstatus=2 and suditstatus=7
+	</select>
+
+	<!--预约年检 8 -->
+	<select id="yyCountOrder" parameterType="Map" resultType="int">
+		select count(1) from jw_order where 1=1
+		<if test="userid!=0">
+			AND userid=#{userid}
+		</if>
+		AND orderstatus=2 and suditstatus=8
+	</select>
+
+	<!--年检 9 -->
+	<select id="njCountOrder" parameterType="Map" resultType="int">
+		select count(1) from jw_order where 1=1
+		<if test="userid!=0">
+			AND userid=#{userid}
+		</if>
+		<if test="station!='' and station!=null">
+			AND station=#{station}
+		</if>
+		AND orderstatus=2 and suditstatus=9
+	</select>
+
+	<!--回访 10 11 -->
+	<select id="hfCountOrder" parameterType="Map" resultType="int">
+		select count(1) from jw_order where 1=1
+		<if test="userid!=0">
+			AND userid=#{userid}
+		</if>
+		AND orderstatus=2 and (suditstatus=10 or suditstatus=11)
+	</select>
+	<!--全部订单 -->
+	<select id="orderListPage" parameterType="Map"
+		resultType="com.sojson.common.model.Order">
+		select *from jw_order where 1=1
+		<if test="search_v!=''">
+			AND (owner LIKE CONCAT(CONCAT('%', #{search_v}), '%') or
+			licenseplate LIKE CONCAT(CONCAT('%', #{search_v}), '%'))		
+	   </if>
+		<if test="userid!=0 and userid!=null">
+			AND userid=#{userid}
+		</if>
+		<if test="station!='' and station!=null">
+			AND station=#{station}
+		</if>
+		<if test="order.suditstatus!=12">
+			AND suditstatus=#{order.suditstatus}
+		</if>
+		<if test="order.owner!='' and order.owner!=null">
+			AND owner=#{order.owner}
+		</if>
+		<if test="order.licenseplate!='' and order.licenseplate!=null">
+			AND licenseplate=#{order.licenseplate}
+		</if>
+		<if test="order.phonenumber!='' and order.phonenumber!=null">
+			AND phonenumber=#{order.phonenumber}
+		</if>
+		<if test="tj_start!= null and tj_start!=''">
+			AND submittime&gt;=#{tj_start}
+		</if>
+		<if test="tj_end!=null and tj_end!=''">
+			AND submittime&lt;=#{tj_end}
+		</if>
+		<if test="yy_start!= null and yy_start!=''">
+			AND appointmenttime&gt;=#{yy_start}
+		</if>
+		<if test="yy_end!=null and yy_end!=''">
+			AND appointmenttime&lt;=#{yy_end}
+		</if>
+		and orderstatus=2 order by suditstatus
+		<if test="page!=-1">
+			limit #{page},10
+		</if>
+	</select>
+
+	<!-- 待分配普通查询 -->
+	<select id="order_nfp_Page" resultType="com.sojson.common.model.Order">
+		select *from jw_order where 1=1
+		<if test="search_v!=''">
+			AND (owner LIKE CONCAT(CONCAT('%', #{search_v}), '%') or
+			licenseplate
+			LIKE CONCAT(CONCAT('%', #{search_v}), '%'))
+		</if>
+		<if test="order.owner!='' and order.owner!=null">
+			AND owner=#{order.owner}
+		</if>
+		<if test="order.licenseplate!='' and order.licenseplate!=null">
+			AND licenseplate=#{order.licenseplate}
+		</if>
+		<if test="order.phonenumber!='' and order.phonenumber!=null">
+			AND phonenumber=#{order.phonenumber}
+		</if>
+		<if test="tj_start!= null and tj_start!=''">
+			AND submittime&gt;=#{tj_start}
+		</if>
+		<if test="tj_end!=null and tj_end!=''">
+			AND submittime&lt;=#{tj_end}
+		</if>
+		<if test="yy_start!= null and yy_start!=''">
+			AND appointmenttime&gt;=#{yy_start}
+		</if>
+		<if test="yy_end!=null and yy_end!=''">
+			AND appointmenttime&lt;=#{yy_end}
+		</if>
+		and orderstatus=2 and suditstatus=0
+		<if test="page!=-1">
+			limit #{page},10
+		</if>
+	</select>
+
+	<!--待接受查询 -->
+	<select id="order_njs_Page" parameterType="Map"
+		resultType="com.sojson.common.model.Order">
+		select *from jw_order where 1=1
+		<if test="search_v!=''">
+			AND (owner LIKE CONCAT(CONCAT('%', #{search_v}), '%') or
+			licenseplate
+			LIKE CONCAT(CONCAT('%', #{search_v}), '%'))
+		</if>
+		<if test="order.owner!='' and order.owner!=null">
+			AND owner=#{order.owner}
+		</if>
+		<if test="userid!=0 and userid!=null">
+			AND userid=#{userid}
+		</if>
+		<if test="order.licenseplate!='' and order.licenseplate!=null">
+			AND licenseplate=#{order.licenseplate}
+		</if>
+		<if test="order.phonenumber!='' and order.phonenumber!=null">
+			AND phonenumber=#{order.phonenumber}
+		</if>
+		<if test="tj_start!= null and tj_start!=''">
+			AND submittime&gt;=#{tj_start}
+		</if>
+		<if test="tj_end!=null and tj_end!=''">
+			AND submittime&lt;=#{tj_end}
+		</if>
+		<if test="yy_start!= null and yy_start!=''">
+			AND appointmenttime&gt;=#{yy_start}
+		</if>
+		<if test="yy_end!=null and yy_end!=''">
+			AND appointmenttime&lt;=#{yy_end}
+		</if>
+		and orderstatus=2 and suditstatus=1
+		<if test="page!=-1">
+			limit #{page},10
+		</if>
+	</select>
+
+	<!--违章查询 -->
+	<select id="order_wzcx_Page" parameterType="Map"
+		resultType="com.sojson.common.model.Order">
+		select *from jw_order where 1=1
+		<if test="search_v!=''">
+			AND (owner LIKE CONCAT(CONCAT('%', #{search_v}), '%') or
+			licenseplate
+			LIKE CONCAT(CONCAT('%', #{search_v}), '%'))
+		</if>
+		<if test="userid!=0">
+			AND userid=#{userid}
+		</if>
+		<if test="order.owner!='' and order.owner!=null">
+			AND owner=#{order.owner}
+		</if>
+		<if test="order.licenseplate!='' and order.licenseplate!=null">
+			AND licenseplate=#{order.licenseplate}
+		</if>
+		<if test="order.phonenumber!='' and order.phonenumber!=null">
+			AND phonenumber=#{order.phonenumber}
+		</if>
+		<if test="tj_start!= null and tj_start!=''">
+			AND submittime&gt;=#{tj_start}
+		</if>
+		<if test="tj_end!=null and tj_end!=''">
+			AND submittime&lt;=#{tj_end}
+		</if>
+		<if test="yy_start!= null and yy_start!=''">
+			AND appointmenttime&gt;=#{yy_start}
+		</if>
+		<if test="yy_end!=null and yy_end!=''">
+			AND appointmenttime&lt;=#{yy_end}
+		</if>
+		and orderstatus=2 and (suditstatus=2 or suditstatus=3)		
+		order by wz_status desc
+		<if test="page!=-1">
+			limit #{page},10
+		</if>
+	</select>
+
+	<!--资料收集 -->
+	<select id="order_zlsj_Page" parameterType="Map"
+		resultType="com.sojson.common.model.Order">
+		select *from jw_order where 1=1
+		<if test="search_v!=''">
+			AND (owner LIKE CONCAT(CONCAT('%', #{search_v}), '%') or
+			licenseplate
+			LIKE CONCAT(CONCAT('%', #{search_v}), '%'))
+		</if>
+		<if test="userid!=0">
+			AND userid=#{userid}
+		</if>
+		<if test="order.owner!='' and order.owner!=null">
+			AND owner=#{order.owner}
+		</if>
+		<if test="order.licenseplate!='' and order.licenseplate!=null">
+			AND licenseplate=#{order.licenseplate}
+		</if>
+		<if test="order.phonenumber!='' and order.phonenumber!=null">
+			AND phonenumber=#{order.phonenumber}
+		</if>
+		<if test="tj_start!= null and tj_start!=''">
+			AND submittime&gt;=#{tj_start}
+		</if>
+		<if test="tj_end!=null and tj_end!=''">
+			AND submittime&lt;=#{tj_end}
+		</if>
+		<if test="yy_start!= null and yy_start!=''">
+			AND appointmenttime&gt;=#{yy_start}
+		</if>
+		<if test="yy_end!=null and yy_end!=''">
+			AND appointmenttime&lt;=#{yy_end}
+		</if>
+		and orderstatus=2 and suditstatus=4
+		<if test="page!=-1">
+			limit #{page},10
+		</if>
+	</select>
+	<!--委托办理 -->
+	<select id="order_wtbl_Page" parameterType="Map"
+		resultType="com.sojson.common.model.Order">
+		select *from jw_order where 1=1
+		<if test="search_v!=''">
+			AND (owner LIKE CONCAT(CONCAT('%', #{search_v}), '%') or
+			licenseplate
+			LIKE CONCAT(CONCAT('%', #{search_v}), '%'))
+		</if>
+		<if test="userid!=0">
+			AND userid=#{userid}
+		</if>
+		<if test="order.owner!='' and order.owner!=null">
+			AND owner=#{order.owner}
+		</if>
+		<if test="order.licenseplate!='' and order.licenseplate!=null">
+			AND licenseplate=#{order.licenseplate}
+		</if>
+		<if test="order.phonenumber!='' and order.phonenumber!=null">
+			AND phonenumber=#{order.phonenumber}
+		</if>
+		<if test="tj_start!= null and tj_start!=''">
+			AND submittime&gt;=#{tj_start}
+		</if>
+		<if test="tj_end!=null and tj_end!=''">
+			AND submittime&lt;=#{tj_end}
+		</if>
+		<if test="yy_start!= null and yy_start!=''">
+			AND appointmenttime&gt;=#{yy_start}
+		</if>
+		<if test="yy_end!=null and yy_end!=''">
+			AND appointmenttime&lt;=#{yy_end}
+		</if>
+		and orderstatus=2 and (suditstatus=5 or suditstatus=6)
+		<if test="page!=-1">
+			limit #{page},10
+		</if>
+	</select>
+	<!--缴费确认 -->
+	<select id="order_jfqr_Page" parameterType="Map"
+		resultType="com.sojson.common.model.Order">
+		select *from jw_order where 1=1
+		<if test="search_v!=''">
+			AND (owner LIKE CONCAT(CONCAT('%', #{search_v}), '%') or
+			licenseplate
+			LIKE CONCAT(CONCAT('%', #{search_v}), '%'))
+		</if>
+		<if test="userid!=0">
+			AND userid=#{userid}
+		</if>
+		<if test="order.owner!='' and order.owner!=null">
+			AND owner=#{order.owner}
+		</if>
+		<if test="order.licenseplate!='' and order.licenseplate!=null">
+			AND licenseplate=#{order.licenseplate}
+		</if>
+		<if test="order.phonenumber!='' and order.phonenumber!=null">
+			AND phonenumber=#{order.phonenumber}
+		</if>
+		<if test="tj_start!= null and tj_start!=''">
+			AND submittime&gt;=#{tj_start}
+		</if>
+		<if test="tj_end!=null and tj_end!=''">
+			AND submittime&lt;=#{tj_end}
+		</if>
+		<if test="yy_start!= null and yy_start!=''">
+			AND appointmenttime&gt;=#{yy_start}
+		</if>
+		<if test="yy_end!=null and yy_end!=''">
+			AND appointmenttime&lt;=#{yy_end}
+		</if>
+		and orderstatus=2 and suditstatus=7
+		<if test="page!=-1">
+			limit #{page},10
+		</if>
+	</select>
+	<!--预约年检 -->
+	<select id="order_yynj_Page" parameterType="Map"
+		resultType="com.sojson.common.model.Order">
+		select *from jw_order where 1=1
+		<if test="search_v!=''">
+			AND (owner LIKE CONCAT(CONCAT('%', #{search_v}), '%') or
+			licenseplate
+			LIKE CONCAT(CONCAT('%', #{search_v}), '%'))
+		</if>
+		<if test="userid!=0">
+			AND userid=#{userid}
+		</if>
+		<if test="order.owner!='' and order.owner!=null">
+			AND owner=#{order.owner}
+		</if>
+		<if test="order.licenseplate!='' and order.licenseplate!=null">
+			AND licenseplate=#{order.licenseplate}
+		</if>
+		<if test="order.phonenumber!='' and order.phonenumber!=null">
+			AND phonenumber=#{order.phonenumber}
+		</if>
+		<if test="tj_start!= null and tj_start!=''">
+			AND submittime&gt;=#{tj_start}
+		</if>
+		<if test="tj_end!=null and tj_end!=''">
+			AND submittime&lt;=#{tj_end}
+		</if>
+		<if test="yy_start!= null and yy_start!=''">
+			AND appointmenttime&gt;=#{yy_start}
+		</if>
+		<if test="yy_end!=null and yy_end!=''">
+			AND appointmenttime&lt;=#{yy_end}
+		</if>
+		and orderstatus=2 and suditstatus=8
+		<if test="page!=-1">
+			limit #{page},10
+		</if>
+	</select>
+	<!--年检 -->
+	<select id="order_nj_Page" parameterType="Map"
+		resultType="com.sojson.common.model.Order">
+		select *from jw_order where 1=1
+		<if test="search_v!=''">
+			AND (owner LIKE CONCAT(CONCAT('%', #{search_v}), '%') or
+			licenseplate
+			LIKE CONCAT(CONCAT('%', #{search_v}), '%'))
+		</if>
+		<if test="station!='' and station!=null">
+			AND station=#{station}
+		</if>
+		<if test="order.owner!='' and order.owner!=null">
+			AND owner=#{order.owner}
+		</if>
+		<if test="order.licenseplate!='' and order.licenseplate!=null">
+			AND licenseplate=#{order.licenseplate}
+		</if>
+		<if test="order.phonenumber!='' and order.phonenumber!=null">
+			AND phonenumber=#{order.phonenumber}
+		</if>
+		<if test="tj_start!= null and tj_start!=''">
+			AND submittime&gt;=#{tj_start}
+		</if>
+		<if test="tj_end!=null and tj_end!=''">
+			AND submittime&lt;=#{tj_end}
+		</if>
+		<if test="yy_start!= null and yy_start!=''">
+			AND appointmenttime&gt;=#{yy_start}
+		</if>
+		<if test="yy_end!=null and yy_end!=''">
+			AND appointmenttime&lt;=#{yy_end}
+		</if>
+		and orderstatus=2 and suditstatus=9
+		<if test="page!=-1">
+			limit #{page},10
+		</if>
+	</select>
+	<!--回访 -->
+	<select id="order_hf_Page" parameterType="Map"
+		resultType="com.sojson.common.model.Order">
+		select *from jw_order where 1=1
+		<if test="search_v!=''">
+			AND (owner LIKE CONCAT(CONCAT('%', #{search_v}), '%') or
+			licenseplate
+			LIKE CONCAT(CONCAT('%', #{search_v}), '%'))
+		</if>
+		<if test="userid!=0">
+			AND userid=#{userid}
+		</if>
+		<if test="order.owner!='' and order.owner!=null">
+			AND owner=#{order.owner}
+		</if>
+		<if test="order.licenseplate!='' and order.licenseplate!=null">
+			AND licenseplate=#{order.licenseplate}
+		</if>
+		<if test="order.phonenumber!='' and order.phonenumber!=null">
+			AND phonenumber=#{order.phonenumber}
+		</if>
+        <if test="order.station!='' and order.station!=null">
+			AND station=#{order.station}
+		</if>
+		<if test="order.customer!='' and order.customer!=null">
+			AND customer=#{order.customer}
+		</if>
+		<if test="tj_start!= null and tj_start!=''">
+			AND submittime&gt;=#{tj_start}
+		</if>
+		<if test="tj_end!=null and tj_end!=''">
+			AND submittime&lt;=#{tj_end}
+		</if>
+		<if test="yy_start!= null and yy_start!=''">
+			AND appointmenttime&gt;=#{yy_start}
+		</if>
+		<if test="yy_end!=null and yy_end!=''">
+			AND appointmenttime&lt;=#{yy_end}
+		</if>
+		and orderstatus=2 and (suditstatus=10 or suditstatus=11)
+		<if test="page!=-1">
+			limit #{page},10
+		</if>
+	</select>
+	<update id="update_js" parameterType="com.sojson.common.model.Order">
+		update jw_order set
+		suditstatus=2 where orderid=#{orderid,jdbcType=INTEGER}
+	</update>
+	<update id="update_ywz" parameterType="com.sojson.common.model.Order">
+		update jw_order set
+		suditstatus=3 where orderid=#{orderid,jdbcType=INTEGER}
+	</update>
+
+	<update id="update_wwz" parameterType="com.sojson.common.model.Order">
+		update jw_order set
+		suditstatus=#{suditstatus,jdbcType=INTEGER} where
+		orderid=#{orderid,jdbcType=INTEGER}
+	</update>
+
+	<update id="update_ysj" parameterType="com.sojson.common.model.Order">
+		update jw_order set
+		suditstatus=5 where orderid=#{orderid,jdbcType=INTEGER}
+	</update>
+
+	<update id="order_wz_th" parameterType="com.sojson.common.model.Order">
+		update jw_order set
+		suditstatus=3 where orderid=#{orderid,jdbcType=INTEGER}
+	</update>
+
+	<update id="update_zlyj" parameterType="com.sojson.common.model.Order">
+		update jw_order set
+		suditstatus=6 where orderid=#{orderid,jdbcType=INTEGER}
+	</update>
+
+	<update id="update_zlsd" parameterType="com.sojson.common.model.Order">
+		update jw_order set
+		suditstatus=8 where orderid=#{orderid,jdbcType=INTEGER}
+	</update>
+
+	<update id="update_jf" parameterType="com.sojson.common.model.Order">
+		update jw_order set
+		suditstatus=#{suditstatus,jdbcType=INTEGER},
+		ispayment=1,
+		fk_time=#{fk_time,jdbcType=VARCHAR}
+		where
+		orderid=#{orderid,jdbcType=INTEGER}
+	</update>
+
+	<update id="update_yynj" parameterType="com.sojson.common.model.Order">
+		update jw_order set
+		appointmenttime=#{appointmenttime,jdbcType=VARCHAR},station=#{station,jdbcType=VARCHAR},suditstatus=7
+		where orderid=#{orderid,jdbcType=INTEGER}
+	</update>
+
+	<update id="update_nj_tg" parameterType="com.sojson.common.model.Order">
+		update jw_order set
+		suditstatus=10 where orderid=#{orderid,jdbcType=INTEGER}
+	</update>
+
+	<update id="update_nj_cxyy" parameterType="com.sojson.common.model.Order">
+		update jw_order set
+		appointmenttime=#{appointmenttime,jdbcType=VARCHAR},suditstatus=9
+		where orderid=#{orderid,jdbcType=INTEGER}
+	</update>
+
+	<update id="update_hfContent" parameterType="com.sojson.common.model.Order">
+		update jw_order set
+		suditstatus=11 where orderid=#{orderid,jdbcType=INTEGER}
+	</update>
+
+	<update id="update_kfy">
+		update jw_order set suditstatus=1,
+		userid=#{0,jdbcType=BIGINT},
+		customer=#{1,jdbcType=VARCHAR}
+		where
+		orderid=#{2,jdbcType=INTEGER}
+	</update>
+	<!-- 财务管理订单数量 -->
+	<select id="finCount_order" resultType="int">
+		select count(1) from
+		jw_order where orderstatus=2
+	</select>
+	<!-- 财务管理当天记录 -->
+	<select id="find_day_list" resultType="com.sojson.common.model.Order">
+		SELECT * FROM jw_order
+		WHERE date(fk_time) = curdate() and orderstatus=2
+	</select>
+	<!-- 财务管理当月记录 -->
+	<select id="find_month_list" resultType="com.sojson.common.model.Order">
+		SELECT *FROM jw_order
+		WHERE DATE_FORMAT(fk_time,'%Y%m')=DATE_FORMAT(CURDATE(
+		),'%Y%m') and
+		orderstatus=2
+	</select>
+	<!-- 财务管理订单列表 -->
+	<select id="fin_list" parameterType="Map"
+		resultType="com.sojson.common.model.Order">
+		select *from jw_order where 1=1
+		<if test="search_v!=''">
+			AND (owner=#{search_v} or
+			licenseplate=#{search_v})
+		</if>
+		<if test="order.owner!='' and order.owner!=null">
+			AND owner=#{order.owner}
+		</if>
+		<if test="order.phonenumber!='' and order.phonenumber!=null">
+			AND phonenumber=#{order.phonenumber}
+		</if>
+		<if test="order.licenseplate!='' and order.licenseplate!=null">
+			AND licenseplate=#{order.licenseplate}
+		</if>
+		AND orderstatus=2
+		<if test="page!=-1">
+			limit #{page},10
+		</if>
+
+	</select>
+	<select id="findAll_fin" resultType="com.sojson.common.model.Order">
+		select *from jw_order where
+		orderstatus=2
+	</select>
+	<!-- 未付款待订单数量 -->
+	<select id="no_pay_count" resultType="int" parameterType="Map">
+		select count(1) from jw_order where orderstatus=1
+	     <if test="userid!=0">
+			AND userid=#{userid}
+		</if>
+	</select>
+	<!-- 未付款待分配订单数量 -->
+	<select id="nopayCount_fp" resultType="int">
+		select count(1) from
+		jw_order where orderstatus=1 AND suditstatus=0
+	</select>
+	<!-- 未付款全部 -->
+	<select id="nopay_All" parameterType="Map"
+		resultType="com.sojson.common.model.Order">
+		select *from jw_order where 1=1
+		<if test="search_v!=''">
+			AND (owner LIKE CONCAT(CONCAT('%', #{search_v}), '%') or
+			licenseplate
+			LIKE CONCAT(CONCAT('%', #{search_v}), '%'))
+		</if>
+		<if test="userid!=0 and userid!=null">
+			AND userid=#{userid}
+		</if>
+		<if test="order.owner!='' and order.owner!=null">
+			AND owner=#{order.owner}
+		</if>
+		<if test="order.licenseplate!='' and order.licenseplate!=null">
+			AND licenseplate=#{order.licenseplate}
+		</if>
+		<if test="order.phonenumber!='' and order.phonenumber!=null">
+			AND phonenumber=#{order.phonenumber}
+		</if>
+		<if test="tj_start!= null and tj_start!=''">
+			AND submittime&gt;=#{tj_start}
+		</if>
+		<if test="tj_end!=null and tj_end!=''">
+			AND submittime&lt;=#{tj_end}
+		</if>
+		<if test="yy_start!= null and yy_start!=''">
+			AND appointmenttime&gt;=#{yy_start}
+		</if>
+		<if test="yy_end!=null and yy_end!=''">
+			AND appointmenttime&lt;=#{yy_end}
+		</if>
+		AND orderstatus=1 order by suditstatus
+		<if test="page!=-1">
+			limit #{page},10
+		</if>
+		
+	</select>
+	<!-- 未付款待分配 -->
+	<select id="nopay_fp" parameterType="Map"
+		resultType="com.sojson.common.model.Order">
+		select *from jw_order where 1=1
+		<if test="search_v!=''">
+			AND (owner LIKE CONCAT(CONCAT('%', #{search_v}), '%') or
+			licenseplate
+			LIKE CONCAT(CONCAT('%', #{search_v}), '%'))
+		</if>
+		<if test="order.owner!='' and order.owner!=null">
+			AND owner=#{order.owner}
+		</if>
+		<if test="order.licenseplate!='' and order.licenseplate!=null">
+			AND licenseplate=#{order.licenseplate}
+		</if>
+		<if test="order.phonenumber!='' and order.phonenumber!=null">
+			AND phonenumber=#{order.phonenumber}
+		</if>
+		<if test="tj_start!= null and tj_start!=''">
+			AND submittime&gt;=#{tj_start}
+		</if>
+		<if test="tj_end!=null and tj_end!=''">
+			AND submittime&lt;=#{tj_end}
+		</if>
+		<if test="yy_start!= null and yy_start!=''">
+			AND appointmenttime&gt;=#{yy_start}
+		</if>
+		<if test="yy_end!=null and yy_end!=''">
+			AND appointmenttime&lt;=#{yy_end}
+		</if>
+		AND suditstatus=0 and orderstatus=1
+		<if test="page!=-1">
+			limit #{page},10
+		</if>
+	</select>
+	<!-- 未付款接受订单数量 -->
+	<select id="nopayCount_js" parameterType="Map" resultType="int">
+		select count(1) from
+		jw_order where 1=1
+		<if test="userid!=0">
+			AND userid=#{userid}
+		</if>
+		AND orderstatus=1 and (suditstatus=1 or suditstatus=12)
+	</select>
+	<!-- 未付款未接收订单数量 -->
+	<select id="nopayCount_njs" parameterType="Map" resultType="int">
+		select count(1) from
+		jw_order where 1=1
+		<if test="userid!=0">
+			AND userid=#{userid}
+		</if>
+		AND orderstatus=1 and suditstatus=1
+	</select>
+	<!-- 未付款接受订单 -->
+	<select id="nopay_js" parameterType="Map"
+		resultType="com.sojson.common.model.Order">
+		select *from jw_order where 1=1
+		<if test="search_v!=''">
+			AND (owner LIKE CONCAT(CONCAT('%', #{search_v}), '%') or
+			licenseplate
+			LIKE CONCAT(CONCAT('%', #{search_v}), '%'))
+		</if>
+		<if test="userid!=0">
+			AND userid=#{userid}
+		</if>
+		<if test="order.owner!='' and order.owner!=null">
+			AND owner=#{order.owner}
+		</if>
+		<if test="order.phonenumber!='' and order.phonenumber!=null">
+			AND phonenumber=#{order.phonenumber}
+		</if>
+		<if test="order.licenseplate!='' and order.licenseplate!=null">
+			AND licenseplate=#{order.licenseplate}
+		</if>
+		<if test="tj_start!= null and tj_start!=''">
+			AND submittime&gt;=#{tj_start}
+		</if>
+		<if test="tj_end!=null and tj_end!=''">
+			AND submittime&lt;=#{tj_end}
+		</if>
+		<if test="yy_start!= null and yy_start!=''">
+			AND appointmenttime&gt;=#{yy_start}
+		</if>
+		<if test="yy_end!=null and yy_end!=''">
+			AND appointmenttime&lt;=#{yy_end}
+		</if>
+		AND orderstatus=1 AND (suditstatus=1 or suditstatus=12)
+		<if test="page!=-1">
+			limit #{page},10
+		</if>
+	</select>
+	<!--未付款接受 -->
+	<update id="update_nopayjs" parameterType="int">
+		update jw_order set
+		suditstatus=12 where orderid=#{orderid,jdbcType=INTEGER}
+	</update>
+
+	<update id="update_nopayjj" parameterType="int">
+		update jw_order set
+		suditstatus=0 where orderid=#{orderid,jdbcType=INTEGER}
+	</update>
+     <!--未付款转化订单 -->
+	<update id="update_order_tyfk" >
+		update jw_order set
+		orderstatus=2,suditstatus=2,time_end=#{time_end,jdbcType=VARCHAR} where orderid=#{orderid,jdbcType=INTEGER}
+	</update>
+
+	<update id="update_order_sqlc" parameterType="com.sojson.common.model.Order">
+		update jw_order set
+		suditstatus=#{suditstatus,jdbcType=INTEGER} where orderid=#{0,jdbcType=INTEGER}
+	</update>
+	<!--已结算订单 -->
+	<select id="account_list" parameterType="Map"
+		resultType="com.sojson.common.model.Order">
+		select *from jw_order where 1=1
+		<if test="search_v!=''">
+			AND (owner LIKE CONCAT(CONCAT('%', #{search_v}), '%') or
+			licenseplate
+			LIKE CONCAT(CONCAT('%', #{search_v}), '%'))
+		</if>
+		<if test="order.owner!='' and order.owner!=null">
+			AND owner=#{order.owner}
+		</if>
+		<if test="order.phonenumber!='' and order.phonenumber!=null">
+			AND phonenumber=#{order.phonenumber}
+		</if>
+		<if test="order.licenseplate!='' and order.licenseplate!=null">
+			AND licenseplate=#{order.licenseplate}
+		</if>
+		and orderstatus=2 and (suditstatus=10 or suditstatus=11)
+		<if test="page!=-1">
+			limit #{page},10
+		</if>
+	</select>
+
+	<!--当月新进订单 -->
+	<select id="month_list" parameterType="Map"
+		resultType="com.sojson.common.model.Order">
+		select *from jw_order where 1=1
+		<if test="search_v!=''">
+			AND (owner LIKE CONCAT(CONCAT('%', #{search_v}), '%') or
+			licenseplate
+			LIKE CONCAT(CONCAT('%', #{search_v}), '%'))
+		</if>
+		<if test="order.owner!='' and order.owner!=null">
+			AND owner=#{order.owner}
+		</if>
+		<if test="order.phonenumber!='' and order.phonenumber!=null">
+			AND phonenumber=#{order.phonenumber}
+		</if>
+		<if test="order.licenseplate!='' and order.licenseplate!=null">
+			AND licenseplate=#{order.licenseplate}
+		</if>
+		AND date_format(submittime,'%Y-%m')=date_format(now(),'%Y-%m')
+		<if test="page!=-1">
+			limit #{page},10
+		</if>
+	</select>
+
+	<!-- 超权限订单数量 -->
+	<select id="spCount_order" resultType="int">
+		select count(1) from
+		jw_order where suditstatus=13
+	</select>
+	<!--超权限审批订单 -->
+
+	<select id="sp_list" parameterType="Map"
+		resultType="com.sojson.common.model.Order">
+		select *from jw_order where 1=1
+		<if test="search_v!=''">
+			AND (owner LIKE CONCAT(CONCAT('%', #{search_v}), '%') or
+			licenseplate
+			LIKE CONCAT(CONCAT('%', #{search_v}), '%'))
+		</if>
+		<if test="order.owner!='' and order.owner!=null">
+			AND owner=#{order.owner}
+		</if>
+		<if test="order.phonenumber!='' and order.phonenumber!=null">
+			AND phonenumber=#{order.phonenumber}
+		</if>
+		<if test="order.licenseplate!='' and order.licenseplate!=null">
+			AND licenseplate=#{order.licenseplate}
+		</if>
+		<if test="tj_start!= null and tj_start!=''">
+			AND submittime&gt;=#{tj_start}
+		</if>
+		<if test="tj_end!=null and tj_end!=''">
+			AND submittime&lt;=#{tj_end}
+		</if>
+		<if test="yy_start!= null and yy_start!=''">
+			AND appointmenttime&gt;=#{yy_start}
+		</if>
+		<if test="yy_end!=null and yy_end!=''">
+			AND appointmenttime&lt;=#{yy_end}
+		</if>
+		AND (suditstatus=13 or suditstatus=15)
+		<if test="page!=-1">
+			limit #{page},10
+		</if>
+	</select>
+	<!--审批通过 -->
+	<update id="update_check" parameterType="com.sojson.common.model.Order">
+		update jw_order set
+		orderstatus=2,suditstatus=#{suditstatus,jdbcType=INTEGER} where orderid=#{orderid,jdbcType=INTEGER}
+	</update>
+	<!--潜在客户 -->
+	<update id="update_order_ddsx" parameterType="int">
+		update jw_order set
+		suditstatus=14 where orderid=#{orderid,jdbcType=INTEGER}
+	</update>
+	<!-- 潜在客户订单数量 -->
+	<select id="qzCount_order" resultType="int">
+		select count(1) from
+		jw_order where suditstatus=14
+	</select>
+
+	<!--潜在客户订单 -->
+
+	<select id="qzlist" parameterType="Map"
+		resultType="com.sojson.common.model.Order">
+		select *from jw_order where 1=1
+		<if test="search_v!=''">
+			AND (owner LIKE CONCAT(CONCAT('%', #{search_v}), '%') or
+			licenseplate
+			LIKE CONCAT(CONCAT('%', #{search_v}), '%'))
+		</if>
+		<if test="order.owner!='' and order.owner!=null">
+			AND owner=#{order.owner}
+		</if>
+		<if test="order.phonenumber!='' and order.phonenumber!=null">
+			AND phonenumber=#{order.phonenumber}
+		</if>
+		<if test="order.licenseplate!='' and order.licenseplate!=null">
+			AND licenseplate=#{order.licenseplate}
+		</if>
+		<if test="tj_start!= null and tj_start!=''">
+			AND submittime&gt;=#{tj_start}
+		</if>
+		<if test="tj_end!=null and tj_end!=''">
+			AND submittime&lt;=#{tj_end}
+		</if>
+		AND suditstatus=14
+		<if test="page!=-1">
+			limit #{page},10
+		</if>
+	</select>
+	<!--添加快递修改 -->
+	<update id="update_fin_kd" parameterType="int">
+		update jw_order set
+		is_kd=1 where orderid=#{orderid,jdbcType=INTEGER}
+	</update>
+    <!--修改线下支付  支付,订单总额 -->
+	<update id="update_Dpay" parameterType="com.sojson.common.model.Order">
+		update jw_order set
+		offlinepayment=#{offlinepayment,jdbcType=VARCHAR},
+		payment_amount=#{payment_amount,jdbcType=VARCHAR},
+		pay=#{pay,jdbcType=VARCHAR},
+		copetotal=#{copetotal,jdbcType=VARCHAR}
+		where orderid=#{orderid,jdbcType=INTEGER}
+	</update>
+	<!--修改支付 -->
+	<!--修改订单信息 -->
+	<update id="update_Order" parameterType="com.sojson.common.model.Order">
+		update jw_order set
+		<if test="owner!='' and owner!=null">
+			owner=#{owner,jdbcType=VARCHAR},
+		</if>
+		<if test="licenseplate!='' and licenseplate!=null">
+			licenseplate=#{licenseplate,jdbcType=VARCHAR},
+		</if>
+		<if test="identificationno!='' and identificationno!=null">
+			identificationno=#{identificationno,jdbcType=VARCHAR},
+		</if>
+		<if test="phonenumber!='' and phonenumber!=null">
+			phonenumber=#{phonenumber,jdbcType=VARCHAR},
+		</if>
+		<if test="vehicle!='' and vehicle!=null">
+			vehicle=#{vehicle,jdbcType=VARCHAR},
+		</if>
+		<if test="cartype!='' and cartype!=null">
+			cartype=#{cartype,jdbcType=VARCHAR},
+		</if>
+		<if test="rigisterdate!='' and rigisterdate!=null">
+			rigisterdate=#{rigisterdate,jdbcType=VARCHAR},
+		</if>
+		<if test="insurancedate!='' and insurancedate!=null">
+			insurancedate=#{insurancedate,jdbcType=VARCHAR},
+		</if>
+		<if test="models!='' and models!=null">
+			models=#{models,jdbcType=VARCHAR},
+		</if>
+		<if test="vin_no!='' and vin_no!=null">
+			vin_no=#{vin_no,jdbcType=VARCHAR},
+		</if>
+		<if test="engine_number!='' and engine_number!=null">
+			engine_number=#{engine_number,jdbcType=VARCHAR}
+		</if>
+		where orderid=#{orderid,jdbcType=INTEGER}
+	</update>
+	
+	<!--2018 6/10修改退单订单状态-->
+	<update id="update_chargeback" parameterType="int">
+		update jw_order set
+		suditstatus=14,
+		qz_status=1
+		where orderid=#{orderid,jdbcType=INTEGER}
+	</update>
+	<!-- ==================================== 定时任务（查询违章数据） ========================================= -->
+	<select id="wzcx_totime" resultType="com.sojson.common.model.Order">
+		select *from jw_order where suditstatus=2 or suditstatus=3
+	</select>
+
+    <update id="update_wz_status" parameterType="int">
+		update jw_order set wz_status=#{0}
+		where orderid=#{1}
+	</update>
+	<!-- ==================================== 定时任务（查询违章数据） ========================================= -->
+    <!--取消违章警示 -->
+    <update id="update_wzstatus" parameterType="int">
+		update jw_order set wz_status=0 where orderid=#{0}
+	</update>
+	<!-- 以上为朱结方添加 -->
+</mapper>

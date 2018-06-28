@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sojson.common.dao.DyMapper">
+	<select id="find_dy" parameterType="int" resultType="com.sojson.common.model.Dy">
+	select *from jw_dy where orderid=#{orderid,jdbcType=INTEGER}	
+	</select>
+	
+    <insert id="add_dy" parameterType="com.sojson.common.model.Dy">
+		insert into jw_dy
+		(insert_time,orderid) values
+		(#{insert_time,jdbcType=VARCHAR},#{orderid,jdbcType=INTEGER})
+	</insert>
+		
+	<delete id="delete_dy" parameterType="com.sojson.common.model.Dy">
+		delete from jw_dy
+		where id=#{id,jdbcType=INTEGER}
+	</delete>
+</mapper>

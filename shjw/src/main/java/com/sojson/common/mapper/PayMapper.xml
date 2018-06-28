@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sojson.common.dao.PayMapper">
+	
+	 <insert id="add_pay" parameterType="com.sojson.common.model.Pay">
+		insert into jw_pay_money
+		(pay_time,orderid,pay_type,pay_money,remark,userid,customer,orderno,pay_kind)
+		values
+		(#{pay_time,jdbcType=VARCHAR},#{orderid,jdbcType=INTEGER},
+		#{pay_type,jdbcType=VARCHAR},#{pay_money,jdbcType=VARCHAR},
+		#{remark,jdbcType=VARCHAR},#{userid,jdbcType=INTEGER},
+		#{customer,jdbcType=VARCHAR},#{orderno,jdbcType=VARCHAR},
+		#{pay_kind,jdbcType=INTEGER})
+	</insert>
+	
+	<select id="getOrder_xx"  parameterType="int"  resultType="com.sojson.common.model.Pay">
+	select  *from jw_pay_money where pay_type=1 and orderid=#{0}
+	</select>
+	
+    <select id="getOrder_yf"  parameterType="int"  resultType="com.sojson.common.model.Pay">
+	select  *from jw_pay_money where pay_type=3 and orderid=#{0}
+	</select>
+	<select id="getOrder_zf"  parameterType="int" resultType="com.sojson.common.model.Pay">
+	select  *from jw_pay_money where pay_type=2 and orderid=#{0}
+	</select>
+	
+	<select id="findone_pay"  parameterType="int" resultType="com.sojson.common.model.Pay">
+	select  *from jw_pay_money where id=#{id,jdbcType=INTEGER}
+	</select>	
+	
+    <select id="find_pay_time"  parameterType="Map" resultType="com.sojson.common.model.Pay">
+	select  *from jw_pay_money where 1=1
+	    <if test="pay_start!= null and pay_start!=''">
+			AND pay_time&gt;=#{pay_start}
+		</if>
+		<if test="pay_end!=null and pay_end!=''">
+			AND pay_time&lt;=#{pay_end}
+		</if>
+	    AND (pay_type=1 or pay_type=2)
+	</select>	
+	
+	<update id="update_pay" parameterType="com.sojson.common.model.Pay">
+		update jw_pay_money set
+		pay_money=#{pay_money,jdbcType=VARCHAR},
+		remark=#{remark,jdbcType=VARCHAR},
+		pay_kind=#{pay_kind,jdbcType=INTEGER}
+		where 
+		id=#{id,jdbcType=INTEGER}
+	</update>
+		
+	<delete id="deletePay" parameterType="int">
+		delete from jw_pay_money
+		where id=#{id,jdbcType=INTEGER}
+	</delete>
+	
+		<delete id="deleteByOrderid" parameterType="int">
+		delete from jw_pay_money
+		where orderid=#{0,jdbcType=INTEGER}
+	</delete>
+	<!-- 财务管理当天线下支付记录 -->
+	<select id="find_day_xxlist" resultType="com.sojson.common.model.Pay">
+		SELECT * FROM jw_pay_money
+		WHERE to_days(pay_time) = to_days(now()) and pay_type=1
+	</select>
+		<!-- 财务管理当天支出记录 -->
+	<select id="find_day_zflist" resultType="com.sojson.common.model.Pay">
+		SELECT * FROM jw_pay_money
+		WHERE to_days(pay_time) = to_days(now()) and pay_type=2
+	</select>
+	  <!-- 财务管理当月线下支付记录 -->
+	<select id="find_month_xxlist" resultType="com.sojson.common.model.Pay">
+		SELECT *FROM jw_pay_money
+		WHERE DATE_FORMAT(pay_time,'%Y%m')=DATE_FORMAT(CURDATE(),'%Y%m') and pay_type=1
+	</select>	
+		  <!-- 财务管理当月支出记录 -->
+	<select id="find_month_zflist" resultType="com.sojson.common.model.Pay">
+		SELECT *FROM jw_pay_money
+		WHERE DATE_FORMAT(pay_time,'%Y%m')=DATE_FORMAT(CURDATE(),'%Y%m') and pay_type=2
+	</select>
+</mapper>

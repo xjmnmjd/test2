@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta name="format-detection" content="telephone=no" />
+<title>检测站管理</title>
+<link rel="stylesheet" type="text/css" href="css/normalize.css?20171222-01" />
+<link rel="stylesheet" type="text/css" href="css/main.css?20171222-01" />
+<link rel="stylesheet" type="text/css" href="css/style.css?20171222-01" />
+<link rel="stylesheet" type="text/css" href="css/index.css?20171222-01" />
+<script type="text/javascript" src="js/jquery-1.8.3.min.js?20171222-01"></script>
+<script type="text/javascript" src="js/common.js?20171222-01"></script>
+<script type="text/javascript" src="js/fastclick.js?20171222-01"></script>
+<script type="text/javascript" src="js/choose_jcz.js?20171222-01"></script>
+<script type="text/javascript"
+	src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js?20171222-01">
+	
+</script>
+</head>
+
+<body>
+	<input id="openId" style="display: none;" />
+	<header class="header">
+		<a class="ico header-back" href="javascript:history.back(-1)"></a>
+		<h1>检测站管理</h1>
+		<a class="ico" id="head_tel_ico"></a>
+	</header>
+	<div id="head_tel_div">
+		<div>
+			<a href="tel:02160501999">客服电话</a>
+		</div>
+		<div>
+			<a href="tel:15000150003">投诉电话</a>
+		</div>
+		<div>
+			<a onclick="zxly()">在线留言</a>
+		</div>
+	</div>
+	<div id="infor_div">
+		<h2>在线留言</h2>
+		<div style="line-height: 3.2rem;margin: .5rem;">
+			客户姓名：<input placeholder="请输入您的姓名" id="contact_name">
+		</div>
+		<div style="line-height: 3.2rem;margin: .5rem;">
+			联系电话：<input placeholder="请输入您的联系电话" type="number" id="contact_phone">
+		</div>
+		<div style="height: 10rem;margin: .5rem;">
+			留言内容：
+			<textarea placeholder="请输入您的留言内容" id="contact_infor"></textarea>
+		</div>
+		<div id="infor_confirm" style="padding-top:2rem;margin-bottom:5rem;">
+			<div style="width: 50%;float: right;" onclick="addInfor()">
+				<input
+					style="text-align: center;background-color:#00bc8d;border-radius: .3rem;width: 80%;"
+					value="确认" />
+			</div>
+			<div style="width: 50%;" id="infor_cancel">
+				<input
+					style="text-align: center;background-color:#ddd;border-radius: .3rem;width: 80%;"
+					value="取消" />
+			</div>
+		</div>
+	</div>
+	<div id="infor_mask"></div>
+	<div class="container">
+		<section class="add-car">
+			<div class="choose-zone">
+				<a>上海</a><a><select id="area"><option>地区选择</option></select></a>
+			</div>
+			<ul class="clearfix m-top" id="jcz_content">
+			</ul>
+		</section>
+	</div>
+
+	<script>
+		$(function() {
+			var version = navigator.userAgent;
+			if (version.indexOf('iPhone') >= 0) {
+				$("#area")
+						.css(
+								{
+									"appearance" : "none",
+									"-moz-appearance" : "none",
+									"-webkit-appearance" : "none",
+									"background" : "url(img/ico_jt_more.png) no-repeat scroll right center transparent",
+									"padding-right" : "1.6rem",
+									"background-size" : "1.4rem 3.1rem"
+								});
+			}
+			chooze_jcz_init();
+			$("#head_tel_ico").click(function() {
+				var display = $("#head_tel_div").css("display");
+				if (display == "none") {
+					$("#head_tel_div").css("display", "block");
+				} else {
+					$("#head_tel_div").css("display", "none");
+				}
+			});
+			$(".container").click(function() {
+				$("#head_tel_div").css("display", "none");
+			});
+			$("#infor_cancel").click(function() {
+				$("#infor_div").css("display", "none");
+				$("#infor_mask").css("display", "none");
+				document.body.style.overflow = "visible";
+			});
+		});
+	</script>
+</body>
+</html>

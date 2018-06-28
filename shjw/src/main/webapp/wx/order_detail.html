@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta name="format-detection" content="telephone=no" />
+<title>订单详情</title>
+<link rel="stylesheet" type="text/css"
+	href="css/normalize.css?20171222-01" />
+<link rel="stylesheet" type="text/css" href="css/main.css?20171222-01" />
+<link rel="stylesheet" type="text/css" href="css/style.css?20171222-01" />
+<link rel="stylesheet" type="text/css" href="css/index.css?20171222-01" />
+<script type="text/javascript" src="js/jquery-1.8.3.min.js?20171222-01"></script>
+<script type="text/javascript" src="js/common.js?20171222-01"></script>
+<script type="text/javascript" src="js/fastclick.js?20171222-01"></script>
+<script type="text/javascript"
+	src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js?20171222-01">
+	
+</script>
+<script type="text/javascript" src="js/order_detail.js?20171222-01"></script>
+</head>
+
+<body>
+	<header class="header">
+		<a class="ico header-back" href="javascript:history.back(-1)"></a>
+		<h1>订单详情</h1>
+		<a class="ico" id="head_tel_ico"></a>
+	</header>
+	<div id="head_tel_div">
+		<div>
+			<a href="tel:02160501999">客服电话</a>
+		</div>
+		<div>
+			<a href="tel:15000150003">投诉电话</a>
+		</div>
+		<div>
+			<a onclick="zxly()">在线留言</a>
+		</div>
+	</div>
+	<div id="infor_div">
+		<h2>在线留言</h2>
+		<div style="line-height: 3.2rem;margin: .5rem;">
+			客户姓名：<input placeholder="请输入您的姓名" id="contact_name">
+		</div>
+		<div style="line-height: 3.2rem;margin: .5rem;">
+			联系电话：<input placeholder="请输入您的联系电话" type="number" id="contact_phone">
+		</div>
+		<div style="height: 10rem;margin: .5rem;">
+			留言内容：
+			<textarea placeholder="请输入您的留言内容" id="contact_infor"></textarea>
+		</div>
+		<div id="infor_confirm" style="padding-top:2rem;margin-bottom:5rem;">
+			<div style="width: 50%;float: right;" onclick="addInfor()">
+				<input
+					style="text-align: center;background-color:#00bc8d;border-radius: .3rem;width: 80%;"
+					value="确认" />
+			</div>
+			<div style="width: 50%;" id="infor_cancel">
+				<input
+					style="text-align: center;background-color:#ddd;border-radius: .3rem;width: 80%;"
+					value="取消" />
+			</div>
+		</div>
+	</div>
+	<div id="infor_mask"></div>
+	<input id="openId" style="display: none" value="123" />
+	<div class="container" style="margin-bottom:5rem">
+		<section class="order">
+			<ul class="clearfix bg-fff">
+				<li>
+					<p class="text m-left" id="pay_status"></p>
+					<p class="c-00bc8d pay-no" id="more_state" style="cursor: pointer;">更多状态</p>
+				</li>
+			</ul>
+			<div class="nj-time detail bg-fff m-top">
+				<h3>
+					<i class="ico ico-order"></i>订单详情
+				</h3>
+				<div>
+					<p>
+						订单编号：<span id="order_no"></span>
+					</p>
+					<p>
+						车牌号码：<span id="carNo"></span>
+					</p>
+					<p>
+						车辆信息：<span id="car_infor"></span>
+					</p>
+					<p>
+						年检公司：<span id="nj_company"></span>
+					</p>
+					<p>
+						预约时间：<span id="yy_time"></span>
+					</p>
+					<p class="total">
+						取件地址：<span id="qj_address"></span>
+					</p>
+				</div>
+			</div>
+			<div class="nj-time detail bg-fff m-top">
+				<h3>
+					<i class="ico ico-pay"></i>收费详情
+				</h3>
+				<div>
+					<p>
+						年检费<span id="nj_fee"></span>
+					</p>
+					<p>
+						环保检测费<span id="hb_nj_fee"></span>
+					</p>
+					<p>
+						尾气费<span id="wq_fee"></span>
+					</p>
+					<p>
+						委托服务费<span id="wt_fee"></span>
+					</p>
+					<p class="total">
+						合计<span style="color:#ff1e3c" id="totalorder"></span>
+					</p>
+				</div>
+			</div>
+			<div class="nj-time detail bg-fff m-top" id="wz_detail">
+				<h3>
+					<i class="ico ico-pay"></i>违章详情
+				</h3>
+			</div>
+		</section>
+		<section>
+			<div class="alert-tip">
+				<h3>注意事项</h3>
+				<ul class="clearfix bg-fff">
+					<li style="border-bottom:none">
+						<h4>年检需携带材料</h4>
+						<p id="nj_zl">无</p>
+					</li>
+					<li style="border-bottom:none">
+						<h4>备注</h4>
+						<p id="nj_bz">无</p>
+					</li>
+				</ul>
+			</div>
+		</section>
+	</div>
+	<div class="btn" id="bottom_menu">
+		<a onclick="del(this)">删除订单</a><a onclick="pay(this)" id="lj_pay">立即支付</a>
+	</div>
+	<script>
+		$(function() {
+			order_detail_init();
+			$("#head_tel_ico").click(function() {
+				var display = $("#head_tel_div").css("display");
+				if (display == "none") {
+					$("#head_tel_div").css("display", "block");
+				} else {
+					$("#head_tel_div").css("display", "none");
+				}
+			});
+			$(".container").click(function() {
+				$("#head_tel_div").css("display", "none");
+			});
+			$("#infor_cancel").click(function() {
+				$("#infor_div").css("display", "none");
+				$("#infor_mask").css("display", "none");
+				document.body.style.overflow = "visible";
+			});
+		});
+	</script>
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta name="format-detection" content="telephone=no" />
+<title>上线检车</title>
+<link rel="stylesheet" type="text/css"
+	href="css/normalize.css?20171222-01" />
+<link rel="stylesheet" type="text/css" href="css/main.css?20171222-01" />
+<link rel="stylesheet" type="text/css" href="css/style.css?20171222-01" />
+<link rel="stylesheet" type="text/css" href="css/index.css?20171222-01" />
+<script type="text/javascript" src="js/common.js?20171222-01"></script>
+<link rel="stylesheet" type="text/css"
+	href="LCalendar/css/LCalendar.css?20171222-01" />
+<script type="text/javascript" src="js/jquery-1.8.3.min.js?20171222-01"></script>
+<script src="LCalendar/js/LCalendar.js?20171222-01"
+	type="text/javascript"></script>
+<script type="text/javascript" src="js/fastclick.js?20171222-01"></script>
+<script type="text/javascript" src="js/sxjc.js?20171222-01"></script>
+<script type="text/javascript"
+	src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js?20171222-01">
+	
+</script>
+<style type="text/css">
+.list-02 {
+	width: 14rem;
+	float: right;
+	text-align: right
+}
+
+.xj_right {
+	text-align: right;
+}
+</style>
+</head>
+
+<body>
+	<input id="openId" style="display: none;" value="22" />
+	<input id="uuid" style="display: none;" />
+	<header class="header">
+		<a class="ico header-back" onclick="goBack()"></a>
+		<h1>上线检车</h1>
+		<a class="ico" id="head_tel_ico"></a>
+	</header>
+	<div id="head_tel_div">
+		<div>
+			<a href="tel:02160501999">客服电话</a>
+		</div>
+		<div>
+			<a href="tel:15000150003">投诉电话</a>
+		</div>
+		<div>
+			<a onclick="zxly()">在线留言</a>
+		</div>
+	</div>
+	<div id="infor_div">
+		<h2>在线留言</h2>
+		<div style="line-height: 3.2rem;margin: .5rem;">
+			客户姓名：<input placeholder="请输入您的姓名" id="contact_name">
+		</div>
+		<div style="line-height: 3.2rem;margin: .5rem;">
+			联系电话：<input placeholder="请输入您的联系电话" type="number" id="contact_phone">
+		</div>
+		<div style="height: 10rem;margin: .5rem;">
+			留言内容：
+			<textarea placeholder="请输入您的留言内容" id="contact_infor"></textarea>
+		</div>
+		<div id="infor_confirm" style="padding-top:2rem;margin-bottom:5rem;">
+			<div style="width: 50%;float: right;" onclick="addInfor()">
+				<input
+					style="text-align: center;background-color:#00bc8d;border-radius: .3rem;width: 80%;"
+					value="确认" />
+			</div>
+			<div style="width: 50%;" id="infor_cancel">
+				<input
+					style="text-align: center;background-color:#ddd;border-radius: .3rem;width: 80%;"
+					value="取消" />
+			</div>
+		</div>
+	</div>
+	<div id="infor_mask"></div>
+	<div class="container">
+		<section class="add-car">
+			<ul class="clearfix">
+				<li><img src="img/ico_dw.png" class="ico-dw" />
+					<p class="txt">
+						年检办理地区：上海<span>目前仅支持上海地区，外牌沪牌均可办理</span>
+					</p></li>
+			</ul>
+			<ul class="clearfix m-top">
+				<li onclick="carManager()" id="orderTitle">
+					<p class="text">
+						<em>【外牌】</em><span>非营运/6座以下客车/2年以内</span>
+					</p> <i class="ico ico-more"></i>
+				</li>
+				<li class="min"><span class="list-04">上年是否发生人伤事故？</span> <span
+					class="list-05">
+						<section title=".slideOne" style="float:right">
+							<div class="slideOne">
+								<input type="checkbox" value="None" id="slideOne" name="check" />
+								<label for="slideOne"></label>
+							</div>
+						</section>
+				</span></li>
+			</ul>
+			<ul class="clearfix m-top">
+				<li class="min"><span class="list-04">上门收材料(免费)</span> <span
+					class="list-05">
+						<section title=".slideTwo" style="float:right">
+							<div class="slideTwo">
+								<input type="checkbox" value="None" id="slideTwo" name="check" />
+								<label for="slideTwo"></label>
+							</div>
+						</section>
+				</span></li>
+				<li class="min slideTwoChild" style="display: none;"><span
+					class="list-04">指定上门时间</span> <span class="list-02"><input
+						type="text" name="date" id="receive_material_date"
+						placeholder="选择上门收材料时间" readonly="readonly" class="jt xj_right" /></span></li>
+				<li class="min slideTwoChild" style="display: none;"><span
+					class="list-01">指定取件地址</span> <span class="list-03"><input
+						placeholder="请输入上门取件地址（仅支持上海市）" id="receive_material_address"
+						class="xj_right" /></span></li>
+				<li class="min slideTwoChild" style="display: none;"><span
+					class="list-01">指定寄件地址</span> <span class="list-03"><input
+						placeholder="请输入寄件地址" id="send_material_address" class="xj_right" /></span></li>
+			</ul>
+			<ul class="clearfix m-top">
+				<li class="min"><span class="list-04">上门接送车<em
+						class="c-ff1e3c" style="font-style:normal">(费用:￥200)</em></span> <span
+					class="list-05">
+						<section title=".slideThree" style="float:right">
+							<div class="slideThree">
+								<input type="checkbox" value="None" id="slideThree" name="check" />
+								<label for="slideThree"></label>
+							</div>
+						</section>
+				</span></li>
+				<li class="min slideThreeChild" style="display: none;"><span
+					class="list-04">指定上门时间</span> <span class="list-02"><input
+						type="text" name="date" id="take_car_date" placeholder="选择上门接送车时间"
+						readonly="readonly" class="jt xj_right" /></span></li>
+				<li class="min slideThreeChild" style="display: none;"><span
+					class="list-01">地址</span> <span class="list-03"><input
+						class="xj_right" placeholder="请输入接车地址（仅限上海市）"
+						id="take_car_address" /></span></li>
+			</ul>
+			<p class="alert" id="alert_text">
+				<i class='ico ico-tip'></i><span id='no_checked_date'></span>
+			</p>
+			<label class="label"><input type="checkbox"
+				id="agree_consent" />我已阅读并同意<span class="popbox-link">《年检须知》</span></label>
+			<div class="btn-ok">
+				<input type="button" value="下一步" onclick="submit()">
+			</div>
+		</section>
+	</div>
+	<!--弹出层开始-->
+	<div id="screen"></div>
+	<div class="popbox" style="height:auto">
+		<div class="mainlist">
+			<h2>年检须知</h2>
+			<div class="max-height">
+				<p>1、
+					可享免检制度！无需现场验车，免检期间，车主每两年提供相应材料后，向公安交管部门申领检验标志，再凭年检标志领环保标志即可。</p>
+				<p>2、 锦卫验车懒人车管家提供代办服务，上门取材料，无需来回奔波！</p>
+				<p>
+					3、 需要提供：<br /> (1)机动车检验标志申请表<br /> (2)车辆交强险保单副本（有效期内）<br />
+					(3)车辆行驶证正副本<br /> (4)车主身份证复印件<br /> (5)委托书
+				</p>
+				<p>
+					4、 不适用免检制度的情况：<br /> (1)自车辆出厂之日起，超过4年未办理上牌手续的<br /> (2)发生过致人伤亡事故的
+					<br />(3)车辆的交通违法行为，交通事故未处理完毕的
+				</p>
+				<p>以上内容不适用于面包车、7座及以上的车辆 锦卫验车提前三个月可以开始办理年检！</p>
+			</div>
+			<a class="close-btn">关闭</a>
+		</div>
+	</div>
+	<!--弹出层结束-->
+	<!-- <a target="_blank"
+		href="http://wpa.qq.com/msgrd?v=1&uin=289094359&site=qq&menu=yes">
+		<img src="img/qq.jpg" width="1rem" />
+	</a> -->
+	<!-- <a target="_blank"
+		href="http://amos.alicdn.com/getcid.aw?v=2&uid=%E4%BF%9D%E9%99%A9%E7%BB%8F%E7%BA%AA%E7%BD%91&site=cntaobao&s=1&groupid=0&charset=utf-8"><img
+		border="0"
+		src="http://amos.alicdn.com/online.aw?v=2&uid=%E4%BF%9D%E9%99%A9%E7%BB%8F%E7%BA%AA%E7%BD%91&site=cntaobao&s=1&charset=utf-8"
+		alt="点击这里给我发消息" title="点击这里给我发消息" /></a> -->
+	<script>
+		$(function() {
+			sxjc_init();
+			$("#head_tel_ico").click(function() {
+				var display = $("#head_tel_div").css("display");
+				if (display == "none") {
+					$("#head_tel_div").css("display", "block");
+				} else {
+					$("#head_tel_div").css("display", "none");
+				}
+			});
+			$(".container").click(function() {
+				$("#head_tel_div").css("display", "none");
+			});
+			$("#infor_cancel").click(function() {
+				$("#infor_div").css("display", "none");
+				$("#infor_mask").css("display", "none");
+				document.body.style.overflow = "visible";
+			});
+		});
+	</script>
+</body>
+</html>

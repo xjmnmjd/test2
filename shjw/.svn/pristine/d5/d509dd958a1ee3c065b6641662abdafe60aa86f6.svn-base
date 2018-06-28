@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta name="format-detection" content="telephone=no" />
+<title>车辆信息录入</title>
+<link rel="stylesheet" type="text/css" href="css/normalize.css?20171222-01" />
+<link rel="stylesheet" type="text/css" href="css/main.css?20171222-01" />
+<link rel="stylesheet" type="text/css" href="css/style.css?20171222-01" />
+<link rel="stylesheet" type="text/css" href="css/index.css?20171222-01" />
+<link rel="stylesheet" type="text/css"
+	href="LCalendar/css/LCalendar.css?20171222-01" />
+<script src="LCalendar/js/LCalendar.js?20171222-01" type="text/javascript"></script>
+<script type="text/javascript" src="js/jquery-1.8.3.min.js?20171222-01"></script>
+<script type="text/javascript" src="js/common.js?20171222-01"></script>
+<script type="text/javascript"
+	src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js?20171222-01">
+	
+</script>
+<script type="text/javascript" src="js/fastclick.js?20171222-01"></script>
+<script type="text/javascript" src="js/car_infro_in.js?20171222-01"></script>
+<style type="text/css">
+.upload_tag {
+	position: absolute;
+	width: 46%;
+	height: 7rem;
+	left: 0rem;
+	top: 0rem;
+	cursor: pointer;
+	outline: medium none;
+	filter: alpha(opacity = 0);
+	-moz-opacity: 0;
+	opacity: 0;
+}
+</style>
+</head>
+
+<body>
+	<header class="header">
+		<a class="ico header-back" href="javascript:history.back(-1)"></a>
+		<h1>车辆信息录入</h1>
+		<a class="ico" id="head_tel_ico"></a>
+	</header>
+	<div id="head_tel_div">
+		<div>
+			<a href="tel:02160501999">客服电话</a>
+		</div>
+		<div>
+			<a href="tel:15000150003">投诉电话</a>
+		</div>
+		<div>
+			<a onclick="zxly()">在线留言</a>
+		</div>
+	</div>
+	<div id="infor_div">
+		<h2>在线留言</h2>
+		<div style="line-height: 3.2rem;margin: .5rem;">
+			客户姓名：<input placeholder="请输入您的姓名" id="contact_name">
+		</div>
+		<div style="line-height: 3.2rem;margin: .5rem;">
+			联系电话：<input placeholder="请输入您的联系电话" type="number" id="contact_phone">
+		</div>
+		<div style="height: 10rem;margin: .5rem;">
+			留言内容：
+			<textarea placeholder="请输入您的留言内容" id="contact_infor"></textarea>
+		</div>
+		<div id="infor_confirm" style="padding-top:2rem;margin-bottom:5rem;">
+			<div style="width: 50%;float: right;" onclick="addInfor()">
+				<input
+					style="text-align: center;background-color:#00bc8d;border-radius: .3rem;width: 80%;"
+					value="确认" />
+			</div>
+			<div style="width: 50%;" id="infor_cancel">
+				<input
+					style="text-align: center;background-color:#ddd;border-radius: .3rem;width: 80%;"
+					value="取消" />
+			</div>
+		</div>
+	</div>
+	<div id="infor_mask"></div>
+	<input id="openId" style="display: none;" value="" />
+	<input id="state" style="display: none;" value="1">
+	<div class="container">
+		<section class="car-infro">
+			<ul class="clearfix">
+				<li><span class="list-01"><em>*</em>车牌</span> <span
+					class="list-02"><input placeholder="请输入您的车牌号" id="car_no"
+						maxlength="12" /></span></li>
+				<li><span class="list-01"><em>*</em>车主</span> <span
+					class="list-02"><input placeholder="请输入名称" id="car_owner"
+						maxlength="5" /></span></li>
+				<li><span class="list-01"><em>*</em>车辆性质</span> <span
+					class="list-02"><select id="clxz"></select></span></li>
+				<li><span class="list-01"><em>*</em>车辆类型</span> <span
+					class="list-02"><select id="cllx">
+					</select></span></li>
+				<li><span class="list-01"><em>*</em>注册日期</span> <span
+					class="list-02"><input type="text" name="date"
+						id="register_date" placeholder="选择注册日期" readonly="readonly"
+						class="jt" /></span></li>
+				<li><span class="list-01"><em>*</em>交强险到期日期</span> <span
+					class="list-02"><input type="text" name="date" id="jq_date"
+						placeholder="选择交强险到期日期" readonly="readonly" class="jt" /></span></li>
+			</ul>
+			<ul class="clearfix m-top">
+				<li><span class="list-01">证件号码</span> <span class="list-02"
+					style="width: 18rem;"><input placeholder="请输入您的身份证号码"
+						id="card_no" maxlength="18" /></span></li>
+				<li>
+					<p>
+						上传证件信息<span>(可选)</span>
+					</p>
+				</li>
+				<li style="height: 9rem;"><div style="position:relative;"
+						onclick="photo(1)">
+						<a class="add-pic" id="xsz_img_content"> <img
+							src="img/xsz.png" id="xsz_img" state="1" /> <span id="xsz_title">上传行驶证照片</span>
+						</a>
+					</div>
+					<div style="position:relative;margin-left: 50%;left: 1rem;"
+						onclick="photo(2)">
+						<a class="add-pic" style="width: 92%;" id="sfz_img_content"> <img
+							src="img/sfz.png" id="sfz_img" state="1" /> <span id="sfz_title">上传身份证或公司营业执照</span>
+						</a>
+					</div></li>
+				<li></li>
+			</ul>
+			<ul class="clearfix m-top" id="phone_yzm">
+				<li><span class="list-01">手机号</span> <span class="list-03"><input
+						placeholder="请输入手机号" id="phone_no" maxlength="11" /></span> <a
+					class="code" id="sendcode" onclick="sendCode()">获取验证码</a></li>
+				<li><span class="list-01">验证码</span> <span class="list-03"><input
+						placeholder="请输入验证码" id="yzm_code" maxlength="6" /></span></li>
+			</ul>
+			<div class="btn-ok">
+				<input type="button" value="确定" onclick="saveInfo()">
+			</div>
+
+		</section>
+	</div>
+
+	<script>
+		$(function() {
+			car_info_in_init();
+			$("#head_tel_ico").click(function() {
+				var display = $("#head_tel_div").css("display");
+				if (display == "none") {
+					$("#head_tel_div").css("display", "block");
+				} else {
+					$("#head_tel_div").css("display", "none");
+				}
+			});
+			$(".container").click(function() {
+				$("#head_tel_div").css("display", "none");
+			});
+			$("#infor_cancel").click(function() {
+				$("#infor_div").css("display", "none");
+				$("#infor_mask").css("display", "none");
+				document.body.style.overflow = "visible";
+			});
+		});
+	</script>
+</body>
+</html>

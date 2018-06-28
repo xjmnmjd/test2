@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sojson.common.dao.Role_menuMapper">
+	<resultMap id="BaseResultMap" type="com.sojson.common.model.Role_menu">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="roleid" property="roleid" jdbcType="INTEGER" />
+		<result column="menuid" property="menuid" jdbcType="INTEGER" />
+	</resultMap>
+		 
+	 <select id="list_roleMenu" parameterType="int"
+	 resultType="com.sojson.common.model.Role_menu">
+		select *from jw_role_menu where roleid=#{0} 	
+	</select>
+	 
+   <delete id="delete_Menu" parameterType="int">
+		delete from jw_role_menu
+		where roleid=#{roleid,jdbcType=INTEGER}
+	</delete>
+   
+   <insert id="addRole_Menu" parameterType="int">
+		insert into jw_role_menu
+		(roleid,menuid)
+		values
+		(#{0},#{1})
+	</insert>
+</mapper>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sojson.common.dao.CarMapper">
+   <!-- 车辆数量 -->
+   <select id="getCountCar" resultType="int">
+	select count(1) from jw_car
+   </select>
+   <!-- 车辆列表 -->
+   <select id="carList" parameterType="Map" resultType="com.sojson.common.model.Car">
+	select *from jw_car where 1=1
+	<if test="car.car_owner!='' and car.car_owner!=null">
+	AND car_owner=#{car.car_owner}
+	</if>
+    <if test="car.car_phone!='' and car.car_phone!=null">
+	AND car_phone=#{car.car_phone}
+	</if>
+    <if test="car.car_plate_number!='' and car.car_plate_number!=null">
+	AND car_plate_number=#{car.car_plate_number}
+	</if>
+	limit #{page},10
+   </select>
+    <!-- 添加车辆--> 
+   <insert id="addCar" parameterType="com.sojson.common.model.Car">
+		insert into jw_car
+		(car_owner,car_phone,car_plate_number,car_type,car_property,car_regdate,car_vin_no,car_engine_No,car_brand_model,car_station)
+		values
+		(#{car_owner,jdbcType=VARCHAR},#{car_phone,jdbcType=VARCHAR},
+		#{car_plate_number,jdbcType=VARCHAR},#{car_type,jdbcType=VARCHAR},
+		#{car_property,jdbcType=VARCHAR},#{car_regdate,jdbcType=VARCHAR},
+		#{car_vin_no,jdbcType=VARCHAR},#{car_engine_No,jdbcType=VARCHAR},
+		#{car_brand_model,jdbcType=VARCHAR},#{car_station,jdbcType=VARCHAR})
+   </insert>
+   
+   <select id="findCar" parameterType="int" resultType="com.sojson.common.model.Car">
+	select *from jw_car where carid=#{0}
+   </select>
+   <select id="findAll_Car" resultType="com.sojson.common.model.Car">
+	select *from jw_car
+   </select>
+   
+   	<update id="updateCar" parameterType="com.sojson.common.model.Car">
+		update jw_car 
+		<set>
+		<if test="car_owner!='' and car_owner!=null">
+		   car_owner=#{car_owner},
+		</if>
+		<if test="car_phone!='' and car_phone!=null">
+		   car_phone=#{car_phone},
+		</if>
+		<if test="car_plate_number!='' and car_plate_number!=null">
+		   car_plate_number=#{car_plate_number},
+		</if>
+		<if test="car_type!='' and car_type!=null">
+		   car_type=#{car_type},
+		</if>
+		<if test="car_property!='' and car_property!=null">
+		   car_property=#{car_property},
+		</if>
+		<if test="car_regdate!='' and car_regdate!=null">
+		   car_regdate=#{car_regdate},
+		</if>
+		<if test="car_vin_no!='' and car_vin_no!=null">
+		   car_vin_no=#{car_vin_no},
+		</if>
+		<if test="car_engine_No!='' and car_engine_No!=null">
+		   car_engine_No=#{car_engine_No},
+		</if>
+		<if test="car_brand_model!='' and car_brand_model!=null">
+		   car_brand_model=#{car_brand_model},
+		</if>
+		<if test="car_station!='' and car_station!=null">
+		   car_station=#{car_station}
+		</if>		
+	    </set>
+		where 
+		carid=#{carid}
+	</update>
+   <delete id="deleteCar" parameterType="int">
+	delete from jw_car where carid=#{0}
+   </delete>
+	
+</mapper>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+	<meta name="viewport"
+		content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta name="format-detection" content="telephone=no" />
+<title>服务导航</title>
+<link rel="stylesheet" type="text/css" href="css/show.css?20171222-01" />
+<script type="text/javascript" src="js/jquery-1.8.3.min.js?20171222-01"></script>
+<script type="text/javascript" src="js/common.js?20171222-01"></script>
+<script type="text/javascript" src="js/weixin.js?20171222-01"></script>
+<script type="text/javascript"
+	src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js?20171222-01">
+	
+</script>
+</head>
+<body>
+	<div class="main">
+		<div class="nav-service mt10 bt">
+			<ul>
+				<a href="javascript:alert('正在开发，敬请期待')"><li><img
+						src="img/guohu.png" />
+						<p>过户转籍</p></li></a>
+				<a href="javascript:alert('正在开发，敬请期待')"><li><img
+						src="img/ershouche.png" />
+						<p>二手车</p></li></a>
+				<a href="javascript:alert('正在开发，敬请期待')">
+					<li style="border-right: none;"><img
+						src="img/chexianbaojia.png" />
+						<p>车险报价</p></li>
+				</a>
+			</ul>
+		</div>
+		<div class="nav-service">
+			<ul>
+				<a href="javascript:alert('正在开发，敬请期待')">
+					<li><img src="img/jiuhoudaijia.png" />
+						<p>酒后代驾</p></li>
+				</a>
+				<a href="javascript:alert('正在开发，敬请期待')"><li><img
+						src="img/jichangdaibo.png" />
+						<p>机场代泊</p></li></a>
+				<a href="javascript:alert('正在开发，敬请期待')">
+					<li style="border-right: none;"><img src="img/zhugesiji.png" />
+						<p>租个司机</p></li>
+				</a>
+			</ul>
+		</div>
+		<div class="nav-service">
+			<ul>
+				<a href="javascript:alert('正在开发，敬请期待')"><li><img
+						src="img/daolujiuyuan.png" />
+						<p>道路救援</p></li></a>
+				<a href="javascript:alert('正在开发，敬请期待')"><li><img
+						src="img/lipeibaoan.png" />
+						<p>理赔报案</p></li></a>
+				<a href="javascript:alert('正在开发，敬请期待')">
+					<li style="border-right: none;"><img src="img/4Sbaoyang.png" />
+						<p>4S店保养</p></li>
+				</a>
+
+			</ul>
+		</div>
+	</div>
+</body>
+<script type="text/javascript">
+$(function(){
+	weixin_init();
+});
+</script>
+</html>

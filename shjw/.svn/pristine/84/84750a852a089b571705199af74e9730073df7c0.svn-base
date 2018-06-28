@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sojson.common.dao.InforMapper">
+	<insert id="insert" parameterType="com.sojson.common.model.Infor">
+		insert into jw_infor
+		(contact_name,contact_phone,infor,insert_time,openid,state)
+		values
+		(#{contact_name,jdbcType=VARCHAR},#{contact_phone,jdbcType=VARCHAR},#{infor,jdbcType=VARCHAR}
+		,#{insert_time,jdbcType=VARCHAR},#{openid,jdbcType=VARCHAR},#{state,jdbcType=INTEGER})
+	</insert>
+	<select id="ListInforByOpenid" parameterType="String"
+		resultType="com.sojson.common.model.Infor">
+		select * from jw_infor where
+		openid=#{openid,jdbcType=VARCHAR}
+	</select>
+	<select id="find_inforList"
+		resultType="com.sojson.common.model.Infor">
+		select * from jw_infor
+	</select>
+
+    <update id="update_ly" parameterType="com.sojson.common.model.Infor">
+		update jw_infor set
+		state=#{state,jdbcType=INTEGER},
+		operator=#{operator,jdbcType=VARCHAR},
+		update_time=#{update_time,jdbcType=VARCHAR}
+		where 
+		id=#{id,jdbcType=INTEGER}
+	</update>
+	
+		
+	<delete id="deleteInfor" parameterType="int">
+		delete from jw_infor
+		where id=#{0,jdbcType=INTEGER}
+	</delete>
+</mapper>

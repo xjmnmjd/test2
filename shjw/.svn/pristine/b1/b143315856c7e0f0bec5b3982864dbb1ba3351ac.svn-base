@@ -1,0 +1,39 @@
+.car-infro {
+	padding: 1rem;
+}
+
+.car-infro .state_img {
+	text-align: center;
+	width: 20%;
+	float: left;
+}
+
+.car-infro .state_title {
+	text-align: left;
+	height: 100%;
+	width: 80%;
+}
+
+.div_1 {
+	height: 2rem;
+	text-align: center;
+	width: 100%;
+}
+
+.div_1 img {
+	width: auto;
+	height: 1rem;
+	text-align: center;
+}
+
+.div_2 {
+	height: 5.5rem;
+	text-align: center;
+	width: 100%;
+}
+
+.div_2 img {
+	width: auto;
+	height: 5rem;
+	text-align: center;
+}

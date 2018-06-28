@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sojson.common.dao.MRoleMapper">
+	<resultMap id="BaseResultMap" type="com.sojson.common.model.M_role">
+		<id column="roleid" property="roleid" jdbcType="INTEGER" />
+		<result column="role_name" property="role_name" jdbcType="VARCHAR" />
+		<result column="insert_time" property="insert_time" jdbcType="VARCHAR" />
+	</resultMap>
+      <insert id="addmRole"  parameterType="com.sojson.common.model.M_role">
+		insert into jw_role (role_name, insert_time
+		)
+		values (#{role_name,jdbcType=VARCHAR},
+		#{insert_time,jdbcType=VARCHAR}
+		)
+	 </insert>
+	 
+	 <select id="getAll_role" resultType="com.sojson.common.model.M_role">
+		select *from jw_role 	
+	</select>
+	
+    <select id="findRole" parameterType="int" resultType="com.sojson.common.model.M_role">
+		select *from jw_role where roleid=#{0}	
+	</select>
+	
+	<delete id="deletemRole" parameterType="int">
+	     delete from jw_role where roleid=#{roleid}	
+	</delete>
+</mapper>

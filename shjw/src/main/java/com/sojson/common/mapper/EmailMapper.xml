@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sojson.common.dao.EmailMapper">
+    <insert id="add_email" parameterType="com.sojson.common.model.JW_Email">
+		insert into jw_email
+		(courier_name,courier_phone,insert_time,order_no,email_type,operator,appointtime,courierNumber) values
+		(#{courier_name,jdbcType=VARCHAR},#{courier_phone,jdbcType=VARCHAR},
+		 #{insert_time,jdbcType=VARCHAR},#{order_no,jdbcType=VARCHAR},
+		 #{email_type,jdbcType=INTEGER},#{operator,jdbcType=VARCHAR},
+		 #{appointtime,jdbcType=VARCHAR},#{courierNumber,jdbcType=VARCHAR})
+	</insert>
+</mapper>

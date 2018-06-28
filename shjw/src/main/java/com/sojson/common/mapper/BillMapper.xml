@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sojson.common.dao.BillMapper">
+	<insert id="insert" parameterType="com.sojson.common.model.Bill">
+		insert into jw_bill
+		(bill_type,bill_head,taxpayer_identification_number,company_address,company_phone,opening_bank,bank_no,mailing_address,contact_number,order_no,insert_time)
+		values
+		(#{bill_type,jdbcType=VARCHAR},#{bill_head,jdbcType=VARCHAR},#{taxpayer_identification_number,jdbcType=VARCHAR}
+		,#{company_address,jdbcType=VARCHAR},#{company_phone,jdbcType=VARCHAR},#{opening_bank,jdbcType=VARCHAR}
+		,#{bank_no,jdbcType=VARCHAR},#{mailing_address,jdbcType=VARCHAR},#{contact_number,jdbcType=VARCHAR},#{order_no,jdbcType=VARCHAR},#{insert_time,jdbcType=VARCHAR})
+	</insert>
+	<select id="getBillByOrderNo" parameterType="String"
+		resultType="com.sojson.common.model.Bill">
+		select
+		id,bill_type,bill_head,taxpayer_identification_number,company_address,company_phone,opening_bank,bank_no,mailing_address,contact_number
+		from jw_bill where
+		order_no=#{order_no,jdbcType=VARCHAR}
+	</select>
+
+	<update id="update" parameterType="com.sojson.common.model.Bill">
+		update jw_bill set
+		bill_type=#{bill_type,jdbcType=VARCHAR},bill_head=#{bill_head,jdbcType=VARCHAR},
+		taxpayer_identification_number=#{taxpayer_identification_number,jdbcType=VARCHAR},
+		company_address=#{company_address,jdbcType=VARCHAR},company_phone=#{company_phone,jdbcType=VARCHAR},
+		opening_bank=#{opening_bank,jdbcType=VARCHAR},bank_no=#{bank_no,jdbcType=VARCHAR},
+		mailing_address=#{mailing_address,jdbcType=VARCHAR},contact_number=#{contact_number,jdbcType=VARCHAR},
+		update_time=#{update_time,jdbcType=VARCHAR}
+		where
+		order_no=#{order_no,jdbcType=VARCHAR}
+	</update>
+
+</mapper>

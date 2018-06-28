@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sojson.common.dao.WtMapper">
+	
+	  	<insert id="addwt" parameterType="com.sojson.common.model.Wt">
+		insert into jw_station_wt
+		(wt_province,wt_area,wt_car_number,
+		wt_mj_fee,wt_mj_zl,wt_fmj_fee,wt_fmj_zl,
+		wt_remark,wt_insert_time,wt_number_day)
+		values
+		(#{wt_province,jdbcType=VARCHAR},#{wt_area,jdbcType=VARCHAR},
+		#{wt_car_number,jdbcType=VARCHAR},#{wt_mj_fee,jdbcType=VARCHAR},
+		#{wt_mj_zl,jdbcType=VARCHAR},#{wt_fmj_fee,jdbcType=VARCHAR},
+		#{wt_fmj_zl,jdbcType=VARCHAR},#{wt_remark,jdbcType=VARCHAR},
+		#{wt_insert_time,jdbcType=VARCHAR},#{wt_number_day,jdbcType=INTEGER})
+	     </insert>
+	  
+	   <select id="getCountWt" parameterType="com.sojson.common.model.Wt"
+		resultType="int">
+	select count(1) from jw_station_wt
+	</select>
+	
+	  <select id="selectWtPage" parameterType="Map"
+		resultType="com.sojson.common.model.Wt">
+	select *from jw_station_wt limit #{i},10
+	</select>
+	
+	 <select id="seletOneWt" parameterType="String"
+		resultType="com.sojson.common.model.Wt">
+	select *from jw_station_wt where wtid=#{wtid,jdbcType=INTEGER}
+	</select>
+	
+	
+	<update id="updateWt" parameterType="com.sojson.common.model.Wt">
+		update jw_station_wt set
+		wt_province=#{wt_province,jdbcType=VARCHAR},
+		wt_area=#{wt_area,jdbcType=VARCHAR},
+		wt_car_number=#{wt_car_number,jdbcType=VARCHAR},
+		wt_mj_fee=#{wt_mj_fee,jdbcType=VARCHAR},
+		wt_mj_zl=#{wt_mj_zl,jdbcType=VARCHAR},
+		wt_fmj_fee=#{wt_fmj_fee,jdbcType=VARCHAR},
+		wt_fmj_zl=#{wt_fmj_zl,jdbcType=VARCHAR},
+		wt_remark=#{wt_remark,jdbcType=VARCHAR},
+		wt_insert_time=#{wt_insert_time,jdbcType=VARCHAR},
+		wt_number_day=#{wt_number_day,jdbcType=VARCHAR}
+		where 
+		wtid=#{wtid,jdbcType=INTEGER}
+	</update>
+	
+	<delete id="deleteWt" parameterType="String">
+		delete from jw_station_wt
+		where wtid=#{wtid,jdbcType=INTEGER}
+	</delete>
+</mapper>

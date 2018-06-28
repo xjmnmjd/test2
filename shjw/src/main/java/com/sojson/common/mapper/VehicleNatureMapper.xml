@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sojson.common.dao.VehicleNatureMapper">
+	<insert id="addnature" parameterType="com.sojson.common.model.VehicleNature">
+		insert into jw_vehiclenature
+		(vehiclenature_name,insert_time,vehiclenature_value,sort) values
+		(#{vehiclenature_name,jdbcType=VARCHAR},#{insert_time,jdbcType=VARCHAR},
+		#{vehiclenature_value,jdbcType=INTEGER},#{sort,jdbcType=INTEGER})
+	</insert>
+	
+	<select id="listnature" resultType="com.sojson.common.model.VehicleNature">
+	    select *from jw_vehiclenature order by sort
+	</select>
+	
+	<update id="updatenature" parameterType="com.sojson.common.model.VehicleNature">
+		update jw_vehiclenature set
+		vehiclenature_name=#{vehiclenature_name,jdbcType=VARCHAR},	
+		insert_time=#{insert_time,jdbcType=VARCHAR},
+		sort=#{sort,jdbcType=INTEGER}	
+		where 
+		vnid=#{vnid,jdbcType=INTEGER}
+	</update>
+<select id="selectonenature" parameterType="int"
+		resultType="com.sojson.common.model.VehicleNature">
+	select vnid,vehiclenature_name,insert_time,sort from jw_vehiclenature where vnid=#{vnid,jdbcType=INTEGER}
+	</select>
+	
+		<delete id="deletenature" parameterType="String">
+		delete from jw_vehiclenature
+		where vnid=#{vnid,jdbcType=INTEGER}
+	</delete>
+</mapper>

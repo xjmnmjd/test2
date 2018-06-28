@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta name="format-detection" content="telephone=no" />
+<title>发票信息</title>
+<link rel="stylesheet" type="text/css"
+	href="css/normalize.css?20171222-01" />
+<link rel="stylesheet" type="text/css" href="css/main.css?20171222-01" />
+<link rel="stylesheet" type="text/css" href="css/style.css?20171222-01" />
+<link rel="stylesheet" type="text/css" href="css/index.css?20171222-01" />
+<script type="text/javascript" src="js/jquery-1.8.3.min.js?20171222-01"></script>
+<script type="text/javascript" src="js/fastclick.js?20171222-01"></script>
+<script type="text/javascript" src="js/common.js?20171222-01"></script>
+<script type="text/javascript" src="js/order_fp.js?20171222-01"></script>
+<script type="text/javascript"
+	src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js?20171222-01">
+	
+</script>
+</head>
+
+<body>
+	<input id="openId" style="display: none;" />
+	<header class="header">
+		<a class="ico header-back" href="javascript:history.back(-1)"></a>
+		<h1>发票信息</h1>
+		<a class="ico" id="head_tel_ico"></a>
+	</header>
+	<div id="head_tel_div">
+		<div>
+			<a href="tel:02160501999">客服电话</a>
+		</div>
+		<div>
+			<a href="tel:15000150003">投诉电话</a>
+		</div>
+		<div>
+			<a onclick="zxly()">在线留言</a>
+		</div>
+	</div>
+	<div id="infor_div">
+		<h2>在线留言</h2>
+		<div style="line-height: 3.2rem;margin: .5rem;">
+			客户姓名：<input placeholder="请输入您的姓名" id="contact_name">
+		</div>
+		<div style="line-height: 3.2rem;margin: .5rem;">
+			联系电话：<input placeholder="请输入您的联系电话" type="number" id="contact_phone">
+		</div>
+		<div style="height: 10rem;margin: .5rem;">
+			留言内容：
+			<textarea placeholder="请输入您的留言内容" id="contact_infor"></textarea>
+		</div>
+		<div id="infor_confirm" style="padding-top:2rem;margin-bottom:5rem;">
+			<div style="width: 50%;float: right;" onclick="addInfor()">
+				<input
+					style="text-align: center;background-color:#00bc8d;border-radius: .3rem;width: 80%;"
+					value="确认" />
+			</div>
+			<div style="width: 50%;" id="infor_cancel">
+				<input
+					style="text-align: center;background-color:#ddd;border-radius: .3rem;width: 80%;"
+					value="取消" />
+			</div>
+		</div>
+	</div>
+	<div id="infor_mask"></div>
+	<div class="container">
+		<section class="car-infro">
+			<ul class="clearfix">
+				<li><span class="list-01">选择发票抬头类型</span> <span class="list-02"
+					style="width: auto;"><select id="bill_type"><option
+								value="person">个人</option>
+							<option value="company">企业</option>
+					</select></span></li>
+				<li><span class="list-01">发票抬头</span> <span class="list-06"><input
+						placeholder="请输入名称" id="bill_head" /></span></li>
+				<li class="company"><span class="list-01">纳税人识别号</span> <span
+					class="list-06"><input placeholder="请输入税号"
+						id="taxpayer_identification_number" /></span></li>
+				<li class="company"><span class="list-01">公司地址</span> <span
+					class="list-06"><input placeholder="请输入地址"
+						id="company_address" /></span></li>
+				<li class="company"><span class="list-01">公司电话</span> <span
+					class="list-06"><input placeholder="请输入电话"
+						id="company_phone" /></span></li>
+				<li class="company"><span class="list-01">开户行</span> <span
+					class="list-06"><input placeholder="请输入开户行"
+						id="opening_bank" /></span></li>
+				<li class="company"><span class="list-01">银行账号</span> <span
+					class="list-06"><input placeholder="请输入银行账号" id="bank_no" /></span></li>
+			</ul>
+			<ul class="clearfix m-top">
+				<li><span class="list-01">寄送地址</span> <span class="list-06"><input
+						placeholder="发票寄送地址" id="mailing_address" /></span></li>
+				<li><span class="list-01">联系电话</span> <span class="list-06"><input
+						placeholder="请输入电话" id="contact_number" /></span></li>
+			</ul>
+			<div class="btn-ok" onclick="add_update_order_fp()">
+				<input type="button" value="保存">
+			</div>
+		</section>
+	</div>
+
+	<script>
+		$(function() {
+			order_fp_init();
+			$("#head_tel_ico").click(function() {
+				var display = $("#head_tel_div").css("display");
+				if (display == "none") {
+					$("#head_tel_div").css("display", "block");
+				} else {
+					$("#head_tel_div").css("display", "none");
+				}
+			});
+			$(".container").click(function() {
+				$("#head_tel_div").css("display", "none");
+			});
+			$("#infor_cancel").click(function() {
+				$("#infor_div").css("display", "none");
+				$("#infor_mask").css("display", "none");
+				document.body.style.overflow = "visible";
+			});
+		});
+	</script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sojson.common.dao.WZ_imgMapper">
+	<select id="getWZ_imgByOrderNo" parameterType="String"
+		resultType="com.sojson.common.model.WZ_img">
+		select * from jw_wz_img where
+		order_no=#{order_no,jdbcType=VARCHAR} order by insert_time desc
+	</select>
+
+	<insert id="insert_img"  parameterType="com.sojson.common.model.WZ_img">
+		insert into jw_wz_img
+		(order_no,img_path,insert_time,operator)
+		values
+		(#{order_no,jdbcType=VARCHAR},#{img_path,jdbcType=VARCHAR},
+		#{insert_time,jdbcType=VARCHAR},#{operator,jdbcType=VARCHAR})
+	</insert>
+		<select id="find_wz_img" parameterType="String"
+		resultType="com.sojson.common.model.WZ_img">
+		select * from jw_wz_img where
+		order_no=#{0,jdbcType=VARCHAR} order by insert_time desc
+	</select>
+</mapper>

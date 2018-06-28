@@ -1,0 +1,43 @@
+.page{
+    list-style: none;
+	width:550px;
+	margin:auto;
+	font-size:14px
+}
+.page>li{
+	border: solid thin #ddd;
+    float: left;
+    padding: 5px 10px;
+    cursor: pointer;
+	background-color:#fff;
+	margin:4px
+}
+.page>li.curru{
+	background-color:#01b386
+}
+.page>li.curru a{
+	color:#fff
+}
+.page li a{
+	color:#000
+}
+.page .pageItem{
+    border: solid thin #DDDDDD;
+    margin: 5px;
+}
+.page .pageItemActive{
+    border: solid thin #00bc8c;
+    margin: 5px;
+    background-color: #00bc8c;
+    color:white;
+}
+.page .pageItem:hover{
+    border: solid thin #00bc8c;
+    background-color: #00bc8c;
+    color:white;
+}
+.page .pageItemDisable{
+    border: solid thin #DDDDDD;
+    margin: 5px;
+    background-color: #DDDDDD;
+}

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sojson.common.dao.MMenuMapper">
+	<resultMap id="BaseResultMap" type="com.sojson.common.model.M_menu">
+		<id column="menuid" property="menuid" jdbcType="INTEGER" />
+		<result column="menu_name" property="menu_name" jdbcType="VARCHAR" />
+		<result column="parentid" property="parentid" jdbcType="INTEGER" />
+		<result column="insert_time" property="insert_time" jdbcType="VARCHAR" />
+		<result column="menu_url" property="menu_url" jdbcType="VARCHAR" />
+		<result column="menu_pid" property="menu_pid" jdbcType="VARCHAR" />
+		<result column="sort" property="sort" jdbcType="INTEGER" />
+		<result column="menu_iclass" property="menu_iclass" jdbcType="VARCHAR" />
+	</resultMap>
+  <select id="getAllMenu" resultType="com.sojson.common.model.M_menu">
+  select *from jw_menu order by sort
+  </select>
+  
+  <select id="getAllMenu_fy"  parameterType="int"  resultType="com.sojson.common.model.M_menu">
+      select *from jw_menu order by sort limit #{0},10
+  </select>
+  
+  <select id="findMenu" parameterType="int" resultType="com.sojson.common.model.M_menu">
+  select *from jw_menu where menuid=#{0}
+  </select>
+  
+  <select id="getCountMenu"  resultType="int">
+  select count(1) from jw_menu
+  </select>
+  
+  <insert id="addMenu"  parameterType="com.sojson.common.model.M_menu">
+		insert into jw_menu (menu_name,parentid,insert_time,menu_url,menu_pid,sort,menu_iclass
+		)
+		values (#{menu_name,jdbcType=VARCHAR},#{parentid,jdbcType=INTEGER},
+		       #{insert_time,jdbcType=VARCHAR},#{menu_url,jdbcType=VARCHAR},
+		       #{menu_pid,jdbcType=VARCHAR},#{sort,jdbcType=INTEGER},
+		       #{menu_iclass,jdbcType=VARCHAR}
+		       )
+ </insert>
+ 
+  <update id="updateMenu" parameterType="com.sojson.common.model.M_menu">
+		update jw_menu set
+		menu_name=#{menu_name,jdbcType=VARCHAR},
+		parentid=#{parentid,jdbcType=INTEGER},
+		menu_url=#{menu_url,jdbcType=VARCHAR},
+		menu_pid=#{menu_pid,jdbcType=VARCHAR},
+		sort=#{sort,jdbcType=INTEGER},
+		menu_iclass=#{menu_iclass,jdbcType=INTEGER}
+		where 
+		menuid=#{menuid,jdbcType=INTEGER}
+	</update>
+	
+	<delete id="deleteMenu" parameterType="int">
+	   delete from jw_menu where menuid=#{0}
+	</delete>
+	
+</mapper>
